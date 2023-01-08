@@ -1,0 +1,70 @@
+.row.no-margin-cards .col {
+    padding: 0;
+}
+.row.no-margin-cards .col .card {
+    margin: 0;
+    box-shadow: none;
+    opacity: 1;
+    border-radius: 0;
+}
+.row.no-margin-cards .col .card:hover {
+    opacity: 0.2;
+}
+.row.no-margin-cards .col .card.featured .card-image {
+    border-radius: 0;
+    max-height: 50vh;
+}
+.row.no-margin-cards .col .card.featured .card-image img {
+    border-radius: 0;
+    height: calc(50vh - 32px);
+    -o-object-fit: cover;
+    object-fit: cover;
+    -o-object-position: 50% 75%;
+    object-position: 50% 75%;
+}
+.row.no-margin-cards .col .card.featured .card-image .card-title {
+    font-size: 6vmin;
+    font-weight: 600;
+    line-height: 1.3em;
+}
+.row.no-margin-cards .col .card.featured .card-image .card-title div {
+    margin: 8px 0;
+    font-size: 0.5em;
+    font-weight: 100;
+    opacity: 0.7;
+    line-height: 1.3em;
+}
+.row.no-margin-cards .col .card.featured .card-image .card-title.gradient {
+    display: block;
+    position: absolute;
+    top: 0px;
+    padding-bottom: 64px;
+    display: block;
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0);
+    background: linear-gradient(to top, rgba(125, 185, 232, 0) 0%, rgba(0, 0, 0, 0.4) 50%, rgba(0, 0, 0, 0.8) 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr="#007db9e8", endColorstr="#cc000000",GradientType=0 );
+}
+.row.no-margin-cards .col .card .card-image {
+    border-radius: 0;
+}
+.row.no-margin-cards .col .card .card-image img {
+    border-radius: 0;
+    height: calc(25vh - 16px);
+    -o-object-fit: cover;
+    object-fit: cover;
+    -o-object-position: 50% 50%;
+    object-position: 50% 50%;
+}
+.row.no-margin-cards .col .card .card-image .card-title.flow-text {
+    font-weight: 600;
+    line-height: 1.2em;
+}
+.row.no-margin-cards .col .card .card-image .card-title.gradient {
+    padding-top: 64px;
+    display: block;
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0);
+    background: linear-gradient(to bottom, rgba(125, 185, 232, 0) 0%, rgba(0, 0, 0, 0.4) 50%, rgba(0, 0, 0, 0.8) 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr="#007db9e8", endColorstr="#cc000000",GradientType=0 );
+}
