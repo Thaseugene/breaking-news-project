@@ -7,6 +7,9 @@ public enum PathType {
     ERROR_PAGE ("controller?action=go_to_error_page"),
     ERROR_JSP_PAGE ("WEB-INF/pages/error/error.jsp"),
     AUTH_PAGE ("controller?action=go_to_auth_page"),
+    ADD_PAGE ("controller?action=go_to_add_news_page"),
+    VIEW_NEWS_PAGE ("controller?action=go_to_view_news&id="),
+    EDIT_NEWS_PAGE ("controller?action=go_to_edit_page&id="),
     OUT ("index.jsp"),
 
     ;

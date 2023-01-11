@@ -1,5 +1,7 @@
 package by.itacademy.news.controller;
 
+import by.itacademy.news.controller.enums.ParameterType;
+import by.itacademy.news.controller.enums.PathType;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.http.HttpServlet;
@@ -21,13 +23,22 @@ public class FrontController extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        actionProvider.getAction(request.getParameter("action")).execute(request, response);
+        doAction(request, response);
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        doGet(request, response);
+        doAction(request, response);
     }
 
+
+    private void doAction(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        try {
+            actionProvider.getAction(request.getParameter(ParameterType.ACTION.getParameter())).execute(request, response);
+        } catch (Exception e) {
+            request.setAttribute(ParameterType.ERROR.getParameter(), e.getMessage());
+            request.getRequestDispatcher(PathType.ERROR_PAGE.getPath()).forward(request, response);
+        }
+    }
 
 }

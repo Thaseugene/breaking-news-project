@@ -40,8 +40,12 @@ public class ActionProvider {
         actions.put(ActionType.GO_TO_ERROR_PAGE, new GoToErrorPage());
     }
 
-    public IAction getAction(String actionType) {
-        return actions.get(ActionType.valueOf(actionType.toUpperCase()));
+    public IAction getAction(String actionType) throws ActionNotFoundException {
+        try {
+            return actions.get(ActionType.valueOf(actionType.toUpperCase()));
+        } catch (IllegalArgumentException e) {
+            throw new ActionNotFoundException("Command not found");
+        }
     }
 
     public static ActionProvider getInstance() {

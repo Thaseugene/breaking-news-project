@@ -26,6 +26,7 @@ public enum ParameterType {
     ROLE ("role"),
     DELETE ("Delete"),
     NO_DATA ("No data"),
+    ACTION ("action"),
     LANGUAGE ("language");
 
     private final String param;

@@ -25,6 +25,7 @@
                     <label for="textarea3"><fmt:message key="label.content"/></label>
                 </div>
                 <input type="hidden" name="id" value="${news.id}"/>
+                <p class="h6 center-align" style="color:red;">${error}</p>
                 <button class="btn waves-effect grey lighten-1" type="submit" name="action" value="save_news">
                     <fmt:message key="label.save"/>
                 </button>

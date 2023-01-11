@@ -7,6 +7,7 @@ import by.itacademy.news.controller.enums.PathType;
 import by.itacademy.news.service.IUserService;
 import by.itacademy.news.service.ServiceProvider;
 import by.itacademy.news.service.UserServiceException;
+import by.itacademy.news.util.validation.ContentChecker;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -16,6 +17,7 @@ import java.io.IOException;
 public class RegistrationAction implements IAction {
 
     private final IUserService userService = ServiceProvider.getInstance().getUserService();
+    private final ContentChecker contentChecker = ContentChecker.getInstance();
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -29,7 +31,7 @@ public class RegistrationAction implements IAction {
             String confirmPassword = request.getParameter(ParameterType.CONFIRM_PSWD.getParameter());
 
 
-            if (login.isEmpty() || password.isEmpty() || email.isEmpty() || name.isEmpty() || surname.isEmpty() || confirmPassword.isEmpty()) {
+            if (contentChecker.isEmpty(login,password,email,name,surname,confirmPassword)) {
                 doResponse(request, response, ParameterType.ERROR.getParameter(), OutputMessage.FIELDS_EMPTY.getMessage());
 
             } else if (!password.equals(confirmPassword)) {

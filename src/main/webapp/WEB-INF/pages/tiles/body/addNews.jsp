@@ -39,6 +39,7 @@
                         </div>
                     </div>
                 </div>
+                <p class="h6 center-align" style="color:red;">${error}</p>
                 <button class="btn waves-effect grey lighten-1" type="submit" name="action" value="add_news"><fmt:message key="label.save" />
                 </button>
             </form>
