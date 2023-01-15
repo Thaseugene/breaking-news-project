@@ -1,9 +1,5 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-         pageEncoding="UTF-8" isELIgnored="false" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
-<fmt:setLocale value="${sessionScope.language}"/>
-<fmt:setBundle basename="text"/>
+
+<%@ include file="/WEB-INF/pages/tiles/body/localMessages.jsp" %>
 
 <!DOCTYPE html>
 
@@ -16,22 +12,22 @@
                 <div class="input-field col s6">
                 <textarea id="textarea1" type="text" class="materialize-textarea validate" required
                           name="title"></textarea>
-                    <label for="textarea1"><fmt:message key="label.title" /></label>
+                    <label for="textarea1">${title}</label>
                 </div>
                 <div class="input-field col s6">
                 <textarea id="textarea2" type="text" class="materialize-textarea validate" required
                           name="briefNews"></textarea>
-                    <label for="textarea2"><fmt:message key="label.brief" /></label>
+                    <label for="textarea2">${brief}</label>
                 </div>
                 <div class="input-field col s12">
                     <textarea id="textarea3" class="materialize-textarea validate" required name="content"></textarea>
-                    <label for="textarea3"><fmt:message key="label.content" /></label>
+                    <label for="textarea3">${content}</label>
                 </div>
                 <br>
                 <div class="input-field col s12">
                     <div class="file-field input-field">
                         <div class="btn-small waves-effect grey lighten-1">
-                            <span><fmt:message key="label.addImage" /></span>
+                            <span>${addImage}</span>
                             <input type="file" name="image" class="validate" required>
                         </div>
                         <div class="file-path-wrapper">
@@ -39,9 +35,11 @@
                         </div>
                     </div>
                 </div>
-                <p class="h6 center-align" style="color:red;">${error}</p>
-                <button class="btn waves-effect grey lighten-1" type="submit" name="action" value="add_news"><fmt:message key="label.save" />
-                </button>
+                <c:if test="${not (sessionScope.error eq null)}">
+                <p class="h6 center-align" style="color:red;"><fmt:message bundle="${loc}"
+                                                                           key="${sessionScope.error}"/></p>
+                </c:if>
+                <button class="btn waves-effect grey lighten-1" type="submit" name="action" value="add_news">${save}</button>
             </form>
             <br>
         </div>

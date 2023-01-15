@@ -1,9 +1,5 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-         pageEncoding="UTF-8" isELIgnored="false" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
-<fmt:setLocale value="${sessionScope.language}"/>
-<fmt:setBundle basename="text"/>
+
+<%@ include file="/WEB-INF/pages/tiles/body/localMessages.jsp" %>
 <!DOCTYPE html>
 
 <html lang="${sessionScope.language}">
@@ -11,7 +7,7 @@
     <div class="col s11">
         <nav class="z-depth-0">
             <div class="nav-wrapper black">
-                <a href="controller?action=go_to_news_list" class="brand-logo left-align white-text">24 <fmt:message key="label.news" /></a>
+                <a href="controller?action=go_to_news_list" class="brand-logo left-align white-text">24 ${newsLabel}</a>
             </div>
         </nav>
     </div>

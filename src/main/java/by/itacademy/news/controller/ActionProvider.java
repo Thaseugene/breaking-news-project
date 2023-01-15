@@ -7,6 +7,7 @@ import by.itacademy.news.controller.edit.news.actions.AddNewsAction;
 import by.itacademy.news.controller.edit.news.actions.DeleteNewsAction;
 import by.itacademy.news.controller.edit.news.actions.SaveNewsAction;
 import by.itacademy.news.controller.enums.ActionType;
+import by.itacademy.news.controller.lang.actions.ChangeLanguageAction;
 import by.itacademy.news.controller.to.page.actions.*;
 
 import java.util.HashMap;
@@ -38,12 +39,13 @@ public class ActionProvider {
         actions.put(ActionType.GO_TO_AUTH_PAGE, new GoToAuthPage());
         actions.put(ActionType.DO_REGISTRATION, new RegistrationAction());
         actions.put(ActionType.GO_TO_ERROR_PAGE, new GoToErrorPage());
+        actions.put(ActionType.CHANGE_LANG, new ChangeLanguageAction());
     }
 
     public IAction getAction(String actionType) throws ActionNotFoundException {
         try {
             return actions.get(ActionType.valueOf(actionType.toUpperCase()));
-        } catch (IllegalArgumentException e) {
+        } catch (NullPointerException | IllegalArgumentException e) {
             throw new ActionNotFoundException("Command not found");
         }
     }

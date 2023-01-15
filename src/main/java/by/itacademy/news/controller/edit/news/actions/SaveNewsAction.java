@@ -26,21 +26,21 @@ public class SaveNewsAction implements IAction {
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         try {
-            if (permissionsChecker.isAdmin(request)) {
+            if (permissionsChecker.isWritePermission(request)) {
                 String title = request.getParameter(ParameterType.TITTLE.getParameter());
                 String briefNews = request.getParameter(ParameterType.BRIEF.getParameter());
                 String content = request.getParameter(ParameterType.CONTENT.getParameter());
                 String id = request.getParameter(ParameterType.ID.getParameter());
                 if (contentChecker.isEmpty(title, briefNews, content, id)) {
                     doResponse(request, response, ParameterType.ERROR.getParameter(),
-                            OutputMessage.FIELDS_EMPTY.getMessage(), PathType.EDIT_NEWS_PAGE.getPath() + id);
+                            OutputMessage.FIELDS_EMPTY_ERR.getMessage(), PathType.EDIT_NEWS_PAGE.getPath() + id);
                 } else {
                     newsService.editNews(id, title, briefNews, content);
                     response.sendRedirect(PathType.VIEW_NEWS_PAGE.getPath() + id);
                 }
             }
         } catch (NewsServiceException | PermissionDeniedException e) {
-            doResponse(request, response, ParameterType.ERROR.getParameter(), e.getMessage(),
+            doResponse(request, response, ParameterType.EXCEPTION_TYPE.getParameter(), e.getMessage(),
                     PathType.ERROR_PAGE.getPath());
         }
     }
@@ -48,9 +48,9 @@ public class SaveNewsAction implements IAction {
 
     private void doResponse(HttpServletRequest request, HttpServletResponse response, String parameter, String message,
                             String path)
-            throws ServletException, IOException {
-        request.setAttribute(parameter, message);
-        request.getRequestDispatcher(path).forward(request, response);
+            throws IOException {
+        request.getSession().setAttribute(parameter, message);
+        response.sendRedirect(path);
     }
 
 }

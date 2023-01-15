@@ -35,9 +35,9 @@ public class FrontController extends HttpServlet {
     private void doAction(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
             actionProvider.getAction(request.getParameter(ParameterType.ACTION.getParameter())).execute(request, response);
-        } catch (Exception e) {
-            request.setAttribute(ParameterType.ERROR.getParameter(), e.getMessage());
-            request.getRequestDispatcher(PathType.ERROR_PAGE.getPath()).forward(request, response);
+        } catch (ActionNotFoundException e) {
+            request.getSession().setAttribute(ParameterType.EXCEPTION_TYPE.getParameter(), e.getMessage());
+            response.sendRedirect(PathType.ERROR_PAGE.getPath());
         }
     }
 

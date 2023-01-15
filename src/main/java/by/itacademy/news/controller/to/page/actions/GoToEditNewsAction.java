@@ -24,7 +24,7 @@ public class GoToEditNewsAction implements IAction {
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
             try {
-                if (permissionsChecker.isAdmin(request)) {
+                if (permissionsChecker.isWritePermission(request)) {
                     String id = request.getParameter(ParameterType.ID.getParameter());
                     News news = newsService.findById(id);
                     request.setAttribute(ParameterType.NEWS.getParameter(), news);
@@ -32,7 +32,7 @@ public class GoToEditNewsAction implements IAction {
                     request.getRequestDispatcher(PathType.BASE_LAYOUT.getPath()).forward(request, response);
                 }
             } catch (NewsServiceException | PermissionDeniedException e) {
-                request.setAttribute(ParameterType.ERROR.getParameter(), e.getMessage());
+                request.setAttribute(ParameterType.EXCEPTION_TYPE.getParameter(), e.getMessage());
                 request.getRequestDispatcher(PathType.ERROR_PAGE.getPath()).forward(request, response);
             }
     }

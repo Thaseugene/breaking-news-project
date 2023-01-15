@@ -1,9 +1,5 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-         pageEncoding="ISO-8859-1" isELIgnored="false" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
-<fmt:setLocale value="${sessionScope.language}"/>
-<fmt:setBundle basename="text"/>
+
+<%@ include file="/WEB-INF/pages/tiles/body/localMessages.jsp" %>
 <!DOCTYPE html>
 
 <html lang="${sessionScope.language}">

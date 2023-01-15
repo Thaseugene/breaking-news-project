@@ -1,9 +1,5 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-         pageEncoding="ISO-8859-1" isELIgnored="false" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
-<fmt:setLocale value="${sessionScope.language}"/>
-<fmt:setBundle basename="text"/>
+
+<%@ include file="/WEB-INF/pages/tiles/body/localMessages.jsp" %>
 <!DOCTYPE html>
 
 <html lang="${sessionScope.language}">
@@ -22,12 +18,12 @@
 </li>
 
 <li style="margin-top: 2px;">
-    <a class="waves-effect grey lighten-1 white-text center-align" href="controller?action=go_to_news_list"><fmt:message key="label.viewAllNews" /></a>
+    <a class="waves-effect grey lighten-1 white-text center-align" href="controller?action=go_to_news_list">${viewAll}</a>
 </li>
 <li style="margin-top: 2px;">
-    <a class="waves-effect grey lighten-1 white-text center-align" href="controller?action=go_to_add_news_page"><fmt:message key="label.addNews" /></a>
+    <a class="waves-effect grey lighten-1 white-text center-align" href="controller?action=go_to_add_news_page">${addNews}</a>
 </li>
 <li style="margin-top: 2px;">
-    <a class="waves-effect grey lighten-1 white-text center-align" href="controller?action=do_sign_out"><fmt:message key="label.signOut" /></a>
+    <a class="waves-effect grey lighten-1 white-text center-align" href="controller?action=do_sign_out">${signOut}</a>
 </li>
 </html>

@@ -23,6 +23,7 @@ public class RegistrationAction implements IAction {
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         try {
+
             String name = request.getParameter(ParameterType.NAME.getParameter());
             String surname = request.getParameter(ParameterType.SURNAME.getParameter());
             String email = request.getParameter(ParameterType.EMAIL.getParameter());
@@ -32,27 +33,27 @@ public class RegistrationAction implements IAction {
 
 
             if (contentChecker.isEmpty(login,password,email,name,surname,confirmPassword)) {
-                doResponse(request, response, ParameterType.ERROR.getParameter(), OutputMessage.FIELDS_EMPTY.getMessage());
+                doResponse(request, response, ParameterType.ERROR.getParameter(), OutputMessage.FIELDS_EMPTY_ERR.getMessage());
 
             } else if (!password.equals(confirmPassword)) {
-                doResponse(request, response, ParameterType.ERROR.getParameter(), OutputMessage.PSW_NOT_EQUAL.getMessage());
+                doResponse(request, response, ParameterType.ERROR.getParameter(), OutputMessage.PSW_NOT_EQUAL_ERR.getMessage());
 
             } else if (userService.checkIsLoginExists(login)) {
-                doResponse(request, response, ParameterType.ERROR.getParameter(), OutputMessage.ALREADY_EXISTS.getMessage());
+                doResponse(request, response, ParameterType.ERROR.getParameter(), OutputMessage.ALREADY_EXISTS_ERR.getMessage());
 
             } else {
                 userService.addNewUser(name, surname, email, login, password);
-                doResponse(request, response, ParameterType.OUTPUT.getParameter(), OutputMessage.ACCOUNT_CREATED.getMessage());
+                doResponse(request, response, ParameterType.OUTPUT.getParameter(), OutputMessage.ACCOUNT_CREATED_MSG.getMessage());
             }
         } catch (UserServiceException e) {
-            request.setAttribute(ParameterType.ERROR.getParameter(), e.getMessage());
-            request.getRequestDispatcher(PathType.ERROR_PAGE.getPath()).forward(request, response);
+            request.getSession().setAttribute(ParameterType.EXCEPTION_TYPE.getParameter(), e.getMessage());
+            response.sendRedirect(PathType.ERROR_PAGE.getPath());
         }
     }
 
     private void doResponse(HttpServletRequest request, HttpServletResponse response, String parameter, String message)
-            throws ServletException, IOException {
-        request.setAttribute(parameter, message);
-        request.getRequestDispatcher(PathType.REG_PAGE.getPath()).forward(request, response);
+            throws IOException {
+        request.getSession().setAttribute(parameter, message);
+        response.sendRedirect(PathType.REG_PAGE.getPath());
     }
 }

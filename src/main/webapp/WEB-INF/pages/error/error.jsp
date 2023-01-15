@@ -22,7 +22,7 @@
 <section id="wrapper" class="error-page">
   <div class="error-box">
     <div class="error-body center-align">
-      <h1>${error}</h1>
+      <h1>${exceptionType}</h1>
       <h3>Service Unavailable!</h3>
       <p class="m-t-30 m-b-30">PLEASE TRY AFTER SOME TIME</p>
       <a href="controller?action=go_to_base_page" class="btn btn-round red waves-effect waves-light m-b-40">Back to home</a>

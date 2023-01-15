@@ -1,6 +1,7 @@
 package by.itacademy.news.util.validation;
 
 import java.util.Arrays;
+import java.util.Objects;
 
 public class ContentChecker {
 
@@ -16,4 +17,6 @@ public class ContentChecker {
     public boolean isEmpty(String... content) {
         return Arrays.stream(content).anyMatch(String::isEmpty);
     }
+
+    public boolean isNull (String... content) {return Arrays.stream(content).anyMatch(Objects::nonNull);}
 }

@@ -1,8 +1,5 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" isELIgnored="false" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
-<fmt:setLocale value="${sessionScope.language}"/>
-<fmt:setBundle basename="text"/>
+
+<%@ include file="/WEB-INF/pages/tiles/body/localMessages.jsp" %>
 <!DOCTYPE html>
 
 <html lang="${sessionScope.language}">
@@ -22,18 +19,18 @@
                         <form action="controller" method="post">
                             <input type="hidden" name="Delete ${news.id}" value="${news.id}"/>
                             <a class="waves-effect grey lighten-1 btn white-text" href="controller?action=go_to_edit_page&id=${news.id}">
-                                <fmt:message key="label.edit" /></a>
-                            <a class="waves-effect grey lighten-1 btn modal-trigger white-text" href="#modal1"><fmt:message key="label.delete" /></a>
+                                    ${edit}</a>
+                            <a class="waves-effect grey lighten-1 btn modal-trigger white-text" href="#modal1">${delete}</a>
                             <div id="modal1" class="modal">
                                 <div class="modal-content">
-                                    <h4><fmt:message key="label.confirmation" /></h4>
-                                    <p><fmt:message key="label.sure" /></p>
+                                    <h4>${confirmation}</h4>
+                                    <p>${sure}</p>
                                 </div>
                                 <div class="modal-footer">
-                                    <a href="#!" class="modal-close waves-effect waves-red btn-flat"><fmt:message key="label.disagree" /></a>
+                                    <a href="#!" class="modal-close waves-effect waves-red btn-flat">${disagree}</a>
                                     <button class="btn-flat modal-close waves-effect waves-green" type="submit"
                                             name="action"
-                                            value="delete_news"><fmt:message key="label.agree" /></button>
+                                            value="delete_news">${agree}</button>
                                 </div>
                             </div>
                         </form>

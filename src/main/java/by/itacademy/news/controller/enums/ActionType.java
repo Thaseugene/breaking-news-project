@@ -15,5 +15,5 @@ public enum ActionType {
 	DELETE_NEWS,
 	GO_TO_EDIT_PAGE,
 	ADD_NEWS,
-	CHANGE_LANG
+	CHANGE_LANG;
 }

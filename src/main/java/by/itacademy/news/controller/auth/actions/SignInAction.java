@@ -22,6 +22,7 @@ public class SignInAction implements IAction {
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         try {
+
             String login = request.getParameter(ParameterType.LOGIN.getParameter());
             String password = request.getParameter(ParameterType.PASSWORD.getParameter());
             Role role = userService.getAuthentication(login, password);
@@ -41,22 +42,21 @@ public class SignInAction implements IAction {
                 response.sendRedirect(PathType.NEWS_LIST.getPath());
 
             } else if (login.isEmpty() || password.isEmpty()) {
-                doResponse(request, ParameterType.NAME, OutputMessage.FIELDS_EMPTY, response);
+                doResponse(request, ParameterType.NAME, OutputMessage.FIELDS_EMPTY_ERR, response);
             } else {
-                doResponse(request, ParameterType.ERROR, OutputMessage.INC_LOGIN, response);
+                doResponse(request, ParameterType.ERROR, OutputMessage.INC_LOGIN_ERR, response);
             }
         } catch (UserServiceException e) {
-            request.setAttribute(ParameterType.ERROR.getParameter(), e.getMessage());
-            request.getRequestDispatcher(PathType.ERROR_PAGE.getPath()).forward(request, response);
+            request.getSession().setAttribute(ParameterType.EXCEPTION_TYPE.getParameter(), e.getMessage());
+            response.sendRedirect(PathType.ERROR_PAGE.getPath());
         }
-
 
     }
 
-    private void doResponse(HttpServletRequest request, ParameterType name, OutputMessage fieldsEmpty, HttpServletResponse response) throws ServletException, IOException {
+    private void doResponse(HttpServletRequest request, ParameterType name, OutputMessage fieldsEmpty, HttpServletResponse response) throws IOException {
         request.getSession(true).setAttribute(ParameterType.USER.getParameter(), OutputMessage.NOT_ACTIVE.getMessage());
-        request.setAttribute(name.getParameter(), fieldsEmpty.getMessage());
-        request.getRequestDispatcher(PathType.AUTH_PAGE.getPath()).forward(request, response);
+        request.getSession().setAttribute(name.getParameter(), fieldsEmpty.getMessage());
+        response.sendRedirect(PathType.AUTH_PAGE.getPath());
     }
 
 }

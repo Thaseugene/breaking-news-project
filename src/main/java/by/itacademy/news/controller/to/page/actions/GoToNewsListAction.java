@@ -33,7 +33,7 @@ public class GoToNewsListAction implements IAction {
 
             request.getRequestDispatcher(PathType.BASE_LAYOUT.getPath()).forward(request, response);
         } catch (NewsServiceException e) {
-            request.setAttribute(ParameterType.ERROR.getParameter(), e.getMessage());
+            request.setAttribute(ParameterType.EXCEPTION_TYPE.getParameter(), e.getMessage());
             request.getRequestDispatcher(PathType.ERROR_PAGE.getPath()).forward(request, response);
         }
     }

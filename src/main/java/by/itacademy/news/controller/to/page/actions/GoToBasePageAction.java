@@ -27,6 +27,7 @@ public class GoToBasePageAction implements IAction {
 
 			request.setAttribute(ParameterType.NEWS.getParameter(), news);
 			request.setAttribute(ParameterType.LATEST_NEWS.getParameter(), latestNews);
+
 			request.getRequestDispatcher(PathType.BASE_LAYOUT.getPath()).forward(request, response);
 		} catch (NewsServiceException e) {
 			request.getRequestDispatcher(PathType.BASE_LAYOUT.getPath()).forward(request, response);

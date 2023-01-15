@@ -7,6 +7,8 @@ import by.itacademy.news.model.News;
 import by.itacademy.news.service.INewsService;
 import by.itacademy.news.service.NewsServiceException;
 import by.itacademy.news.service.ServiceProvider;
+import by.itacademy.news.util.validation.PermissionDeniedException;
+import by.itacademy.news.util.validation.PermissionsChecker;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -16,18 +18,21 @@ import java.io.IOException;
 public class GoToViewNewsAction implements IAction {
 
     private final INewsService newsService = ServiceProvider.getInstance().getNewsService();
+    private final PermissionsChecker permissionsChecker = PermissionsChecker.getInstance();
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
-            String id = request.getParameter(ParameterType.ID.getParameter());
-            News news = newsService.findById(id);
+            if (permissionsChecker.isReadPermission(request)) {
+                String id = request.getParameter(ParameterType.ID.getParameter());
+                News news = newsService.findById(id);
 
-            request.setAttribute(ParameterType.NEWS.getParameter(), news);
-            request.setAttribute(ParameterType.PRESENTATION.getParameter(), ParameterType.VIEW_NEWS.getParameter());
-            request.getRequestDispatcher(PathType.BASE_LAYOUT.getPath()).forward(request, response);
-        } catch (NewsServiceException e) {
-            request.setAttribute(ParameterType.ERROR.getParameter(), e.getMessage());
+                request.setAttribute(ParameterType.NEWS.getParameter(), news);
+                request.setAttribute(ParameterType.PRESENTATION.getParameter(), ParameterType.VIEW_NEWS.getParameter());
+                request.getRequestDispatcher(PathType.BASE_LAYOUT.getPath()).forward(request, response);
+            }
+        } catch (NewsServiceException | PermissionDeniedException e) {
+            request.setAttribute(ParameterType.EXCEPTION_TYPE.getParameter(), e.getMessage());
             request.getRequestDispatcher(PathType.ERROR_PAGE.getPath()).forward(request, response);
         }
     }

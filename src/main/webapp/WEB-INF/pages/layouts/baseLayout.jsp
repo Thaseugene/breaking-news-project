@@ -1,11 +1,10 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" isELIgnored="false" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+         pageEncoding="UTF-8" isELIgnored="false" %>
+<%@ include file="/WEB-INF/pages/tiles/body/localMessages.jsp" %>
 <c:if test="${sessionScope.language eq null}">
     <c:set var="language" value="en_US" scope="session"/>
 </c:if>
-<fmt:setLocale value="${sessionScope.language}"/>
-<fmt:setBundle basename="text"/>
+
 <!DOCTYPE html>
 
 <html lang="${sessionScope.language}">
@@ -42,12 +41,12 @@
 <div class="row" lang="${sessionScope.language}">
 
     <div class="col s12 content center-align">
-        <c:if test="${not (sessionScope.user eq 'active')}">
-            <c:import url="/WEB-INF/pages/tiles/body/guestBody.jsp"/>
-        </c:if>
-        <c:if test="${(sessionScope.user eq 'active')}">
-            <c:import url="/WEB-INF/pages/tiles/body/body.jsp"/>
-        </c:if>
+        <%--        <c:if test="${not (sessionScope.user eq 'active')}">--%>
+        <%--            <c:import url="/WEB-INF/pages/tiles/body/guestBody.jsp"/>--%>
+        <%--        </c:if>--%>
+        <%--        <c:if test="${(sessionScope.user eq 'active')}">--%>
+        <c:import url="/WEB-INF/pages/tiles/body/body.jsp"/>
+        <%--        </c:if>--%>
     </div>
 </div>
 

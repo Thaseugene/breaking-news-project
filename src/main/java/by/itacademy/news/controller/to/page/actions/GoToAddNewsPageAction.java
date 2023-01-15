@@ -18,12 +18,15 @@ public class GoToAddNewsPageAction implements IAction {
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
-            if (permissionsChecker.isAdmin(request)) {
+            if (permissionsChecker.isWritePermission(request)) {
+
                 request.setAttribute(ParameterType.PRESENTATION.getParameter(), ParameterType.ADD_NEWS.getParameter());
                 request.getRequestDispatcher(PathType.BASE_LAYOUT.getPath()).forward(request, response);
+
+                request.getSession(true).removeAttribute(ParameterType.ERROR.getParameter());
             }
         } catch (PermissionDeniedException e) {
-            request.setAttribute(ParameterType.ERROR.getParameter(), e.getMessage());
+            request.setAttribute(ParameterType.EXCEPTION_TYPE.getParameter(), e.getMessage());
             request.getRequestDispatcher(PathType.ERROR_PAGE.getPath()).forward(request, response);
         }
     }
