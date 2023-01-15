@@ -41,12 +41,7 @@
 <div class="row" lang="${sessionScope.language}">
 
     <div class="col s12 content center-align">
-        <%--        <c:if test="${not (sessionScope.user eq 'active')}">--%>
-        <%--            <c:import url="/WEB-INF/pages/tiles/body/guestBody.jsp"/>--%>
-        <%--        </c:if>--%>
-        <%--        <c:if test="${(sessionScope.user eq 'active')}">--%>
         <c:import url="/WEB-INF/pages/tiles/body/body.jsp"/>
-        <%--        </c:if>--%>
     </div>
 </div>
 
