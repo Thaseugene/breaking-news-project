@@ -35,9 +35,9 @@
                         </div>
                     </div>
                 </div>
-                <c:if test="${not (sessionScope.error eq null)}">
+                <c:if test="${not (param.error eq null)}">
                 <p class="h6 center-align" style="color:red;"><fmt:message bundle="${loc}"
-                                                                           key="${sessionScope.error}"/></p>
+                                                                           key="${param.error}"/></p>
                 </c:if>
                 <button class="btn waves-effect grey lighten-1" type="submit" name="action" value="add_news">${save}</button>
             </form>

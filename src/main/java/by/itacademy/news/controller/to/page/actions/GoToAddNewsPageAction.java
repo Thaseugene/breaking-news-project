@@ -26,7 +26,7 @@ public class GoToAddNewsPageAction implements IAction {
                 request.getSession(true).removeAttribute(ParameterType.ERROR.getParameter());
             }
         } catch (PermissionDeniedException e) {
-            request.setAttribute(ParameterType.EXCEPTION_TYPE.getParameter(), e.getMessage());
+            request.setAttribute(ParameterType.EXCEPTION_MSG.getParameter(), e.getMessage());
             request.getRequestDispatcher(PathType.ERROR_PAGE.getPath()).forward(request, response);
         }
     }

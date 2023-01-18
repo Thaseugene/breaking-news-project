@@ -1,6 +1,7 @@
 package by.itacademy.news.controller.to.page.actions;
 
 import by.itacademy.news.controller.IAction;
+import by.itacademy.news.controller.enums.ParameterType;
 import by.itacademy.news.controller.enums.PathType;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

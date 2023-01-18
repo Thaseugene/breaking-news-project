@@ -27,9 +27,10 @@ public enum ParameterType {
     DELETE ("Delete"),
     NO_DATA ("No data"),
     ACTION ("action"),
-    EXCEPTION_TYPE ("exceptionType"),
+    EXCEPTION_MSG("exceptionMessage"),
     LAST_ACTION ("lastAction"),
-    LANGUAGE ("language");
+    LANGUAGE ("language"),
+    GET_METHOD_TYPE ("GET");
 
     private final String param;
 

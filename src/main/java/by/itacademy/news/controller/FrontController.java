@@ -36,7 +36,7 @@ public class FrontController extends HttpServlet {
         try {
             actionProvider.getAction(request.getParameter(ParameterType.ACTION.getParameter())).execute(request, response);
         } catch (ActionNotFoundException e) {
-            request.getSession().setAttribute(ParameterType.EXCEPTION_TYPE.getParameter(), e.getMessage());
+            request.getSession().setAttribute(ParameterType.EXCEPTION_MSG.getParameter(), e.getMessage());
             response.sendRedirect(PathType.ERROR_PAGE.getPath());
         }
     }

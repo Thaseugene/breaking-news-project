@@ -4,7 +4,6 @@ import by.itacademy.news.controller.IAction;
 import by.itacademy.news.controller.enums.ParameterType;
 import by.itacademy.news.controller.enums.PathType;
 import by.itacademy.news.model.News;
-import by.itacademy.news.model.enums.Role;
 import by.itacademy.news.service.INewsService;
 import by.itacademy.news.service.NewsServiceException;
 import by.itacademy.news.service.ServiceProvider;
@@ -13,7 +12,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.List;
 
 public class GoToNewsListAction implements IAction {
@@ -33,7 +31,7 @@ public class GoToNewsListAction implements IAction {
 
             request.getRequestDispatcher(PathType.BASE_LAYOUT.getPath()).forward(request, response);
         } catch (NewsServiceException e) {
-            request.setAttribute(ParameterType.EXCEPTION_TYPE.getParameter(), e.getMessage());
+            request.setAttribute(ParameterType.EXCEPTION_MSG.getParameter(), e.getMessage());
             request.getRequestDispatcher(PathType.ERROR_PAGE.getPath()).forward(request, response);
         }
     }

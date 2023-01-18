@@ -8,6 +8,7 @@ import by.itacademy.news.service.IUserService;
 import by.itacademy.news.service.ServiceProvider;
 import by.itacademy.news.service.UserServiceException;
 import by.itacademy.news.util.validation.ContentChecker;
+import by.itacademy.news.util.validation.ParamToStringParser;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -18,7 +19,7 @@ public class RegistrationAction implements IAction {
 
     private final IUserService userService = ServiceProvider.getInstance().getUserService();
     private final ContentChecker contentChecker = ContentChecker.getInstance();
-
+    private final ParamToStringParser toStringParser = ParamToStringParser.getInstance();
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
@@ -33,27 +34,29 @@ public class RegistrationAction implements IAction {
 
 
             if (contentChecker.isEmpty(login,password,email,name,surname,confirmPassword)) {
-                doResponse(request, response, ParameterType.ERROR.getParameter(), OutputMessage.FIELDS_EMPTY_ERR.getMessage());
+                doResponse(response, ParameterType.ERROR.getParameter(), OutputMessage.FIELDS_EMPTY_ERR.getMessage());
 
             } else if (!password.equals(confirmPassword)) {
-                doResponse(request, response, ParameterType.ERROR.getParameter(), OutputMessage.PSW_NOT_EQUAL_ERR.getMessage());
+                doResponse(response, ParameterType.ERROR.getParameter(), OutputMessage.PSW_NOT_EQUAL_ERR.getMessage());
 
             } else if (userService.checkIsLoginExists(login)) {
-                doResponse(request, response, ParameterType.ERROR.getParameter(), OutputMessage.ALREADY_EXISTS_ERR.getMessage());
+                doResponse(response, ParameterType.ERROR.getParameter(), OutputMessage.ALREADY_EXISTS_ERR.getMessage());
 
             } else {
                 userService.addNewUser(name, surname, email, login, password);
-                doResponse(request, response, ParameterType.OUTPUT.getParameter(), OutputMessage.ACCOUNT_CREATED_MSG.getMessage());
+                doResponse(response, ParameterType.OUTPUT.getParameter(), OutputMessage.ACCOUNT_CREATED_MSG.getMessage());
             }
         } catch (UserServiceException e) {
-            request.getSession().setAttribute(ParameterType.EXCEPTION_TYPE.getParameter(), e.getMessage());
-            response.sendRedirect(PathType.ERROR_PAGE.getPath());
+            String path = String.format("%s&%s",PathType.ERROR_PAGE.getPath(),
+                    toStringParser.convertToStringPath(ParameterType.EXCEPTION_MSG.getParameter(), e.getMessage()));
+            response.sendRedirect(path);
         }
     }
 
-    private void doResponse(HttpServletRequest request, HttpServletResponse response, String parameter, String message)
+    private void doResponse(HttpServletResponse response, String parameter, String message)
             throws IOException {
-        request.getSession().setAttribute(parameter, message);
-        response.sendRedirect(PathType.REG_PAGE.getPath());
+        String path = String.format("%s&%s", PathType.REG_PAGE.getPath(),
+                toStringParser.convertToStringPath(parameter, message));
+        response.sendRedirect(path);
     }
 }

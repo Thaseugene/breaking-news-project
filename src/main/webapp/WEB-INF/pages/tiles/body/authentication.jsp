@@ -21,9 +21,9 @@
                     <label for="Password">${password}</label>
                 </div>
                 <div class="input-field col s12">
-                    <c:if test="${not (sessionScope.error eq null)}">
+                    <c:if test="${not (param.error eq null)}">
                         <p class="h6 center-align" style="color:red;"><fmt:message bundle="${loc}"
-                                                                                   key="${sessionScope.error}"/></p>
+                                                                                   key="${param.error}"/></p>
                     </c:if>
                     <button class="btn-large waves-effect grey lighten-1" type="submit" name="action" value="do_sign_in"
                             style="width: 60%">

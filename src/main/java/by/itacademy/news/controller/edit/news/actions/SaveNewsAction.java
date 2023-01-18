@@ -8,6 +8,7 @@ import by.itacademy.news.service.INewsService;
 import by.itacademy.news.service.NewsServiceException;
 import by.itacademy.news.service.ServiceProvider;
 import by.itacademy.news.util.validation.ContentChecker;
+import by.itacademy.news.util.validation.ParamToStringParser;
 import by.itacademy.news.util.validation.PermissionDeniedException;
 import by.itacademy.news.util.validation.PermissionsChecker;
 import jakarta.servlet.ServletException;
@@ -21,6 +22,7 @@ public class SaveNewsAction implements IAction {
     private final INewsService newsService = ServiceProvider.getInstance().getNewsService();
     private final PermissionsChecker permissionsChecker = PermissionsChecker.getInstance();
     private final ContentChecker contentChecker = ContentChecker.getInstance();
+    private final ParamToStringParser toStringParser = ParamToStringParser.getInstance();
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -32,7 +34,7 @@ public class SaveNewsAction implements IAction {
                 String content = request.getParameter(ParameterType.CONTENT.getParameter());
                 String id = request.getParameter(ParameterType.ID.getParameter());
                 if (contentChecker.isEmpty(title, briefNews, content, id)) {
-                    doResponse(request, response, ParameterType.ERROR.getParameter(),
+                    doResponse(response, ParameterType.ERROR.getParameter(),
                             OutputMessage.FIELDS_EMPTY_ERR.getMessage(), PathType.EDIT_NEWS_PAGE.getPath() + id);
                 } else {
                     newsService.editNews(id, title, briefNews, content);
@@ -40,17 +42,15 @@ public class SaveNewsAction implements IAction {
                 }
             }
         } catch (NewsServiceException | PermissionDeniedException e) {
-            doResponse(request, response, ParameterType.EXCEPTION_TYPE.getParameter(), e.getMessage(),
+            doResponse(response, ParameterType.EXCEPTION_MSG.getParameter(), e.getMessage(),
                     PathType.ERROR_PAGE.getPath());
         }
     }
 
 
-    private void doResponse(HttpServletRequest request, HttpServletResponse response, String parameter, String message,
-                            String path)
-            throws IOException {
-        request.getSession().setAttribute(parameter, message);
-        response.sendRedirect(path);
+    private void doResponse(HttpServletResponse response, String parameter, String message, String path) throws IOException {
+        String finalPath = String.format("%s&%s",path, toStringParser.convertToStringPath(parameter, message));
+        response.sendRedirect(finalPath);
     }
 
 }

@@ -32,7 +32,7 @@ public class GoToViewNewsAction implements IAction {
                 request.getRequestDispatcher(PathType.BASE_LAYOUT.getPath()).forward(request, response);
             }
         } catch (NewsServiceException | PermissionDeniedException e) {
-            request.setAttribute(ParameterType.EXCEPTION_TYPE.getParameter(), e.getMessage());
+            request.setAttribute(ParameterType.EXCEPTION_MSG.getParameter(), e.getMessage());
             request.getRequestDispatcher(PathType.ERROR_PAGE.getPath()).forward(request, response);
         }
     }

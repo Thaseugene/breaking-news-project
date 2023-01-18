@@ -12,9 +12,7 @@ public enum PathType {
     EDIT_NEWS_PAGE ("controller?action=go_to_edit_page&id="),
     CONTROLLER_PATH ("controller?"),
     CHANGE_LANG ("action=change_lang"),
-    OUT ("index.jsp"),
-
-    ;
+    OUT ("index.jsp");
 
     private final String path;
 

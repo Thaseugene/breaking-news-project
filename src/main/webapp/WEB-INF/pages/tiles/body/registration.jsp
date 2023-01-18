@@ -7,9 +7,9 @@
         <form class="col s8 offset-s2 card" action="controller" method="post">
             <div class="row">
                 <h5 class="center-align">${createNew}</h5>
-                <c:if test="${not (sessionScope.output eq null)}">
+                <c:if test="${not (param.output eq null)}">
                     <p class="h6 center-align" style="color:lightseagreen;"><fmt:message bundle="${loc}"
-                                                                                         key="${sessionScope.output}"/></p>
+                                                                                         key="${param.output}"/></p>
                 </c:if>
                 <div class="input-field col s6">
                     <input id="Name" type="text" class="validate" required name="name">
@@ -36,9 +36,9 @@
                     <label for="Confirm password">${confirmPassword}</label>
                 </div>
                 <div class="input-field col s12">
-                    <c:if test="${not (sessionScope.error eq null)}">
+                    <c:if test="${not (param.error eq null)}">
                         <p class="h6 center-align" style="color:red;"><fmt:message bundle="${loc}"
-                                                                                   key="${sessionScope.error}"/></p>
+                                                                                   key="${param.error}"/></p>
                     </c:if>
                     <button class="btn-large waves-effect grey lighten-1" type="submit" name="action"
                             value="do_registration" style="width: 65%">
