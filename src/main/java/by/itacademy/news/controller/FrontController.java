@@ -1,7 +1,7 @@
 package by.itacademy.news.controller;
 
-import by.itacademy.news.controller.enums.ParameterType;
-import by.itacademy.news.controller.enums.PathType;
+import by.itacademy.news.controller.constants.ParameterType;
+import by.itacademy.news.controller.constants.PathType;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.http.HttpServlet;

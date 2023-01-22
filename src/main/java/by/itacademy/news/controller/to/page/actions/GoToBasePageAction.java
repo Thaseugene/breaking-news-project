@@ -1,12 +1,11 @@
 package by.itacademy.news.controller.to.page.actions;
 
 import java.io.IOException;
-import java.util.Collections;
 import java.util.List;
 
 import by.itacademy.news.controller.IAction;
-import by.itacademy.news.controller.enums.ParameterType;
-import by.itacademy.news.controller.enums.PathType;
+import by.itacademy.news.controller.constants.ParameterType;
+import by.itacademy.news.controller.constants.PathType;
 import by.itacademy.news.model.News;
 import by.itacademy.news.service.INewsService;
 import by.itacademy.news.service.NewsServiceException;

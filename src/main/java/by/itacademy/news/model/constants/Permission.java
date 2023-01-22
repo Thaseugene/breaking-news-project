@@ -1,4 +1,4 @@
-package by.itacademy.news.model.enums;
+package by.itacademy.news.model.constants;
 
 public enum Permission {
 

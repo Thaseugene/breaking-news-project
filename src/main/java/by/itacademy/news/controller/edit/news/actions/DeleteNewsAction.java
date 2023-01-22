@@ -1,12 +1,12 @@
 package by.itacademy.news.controller.edit.news.actions;
 
 import by.itacademy.news.controller.IAction;
-import by.itacademy.news.controller.enums.ParameterType;
-import by.itacademy.news.controller.enums.PathType;
+import by.itacademy.news.controller.constants.ParameterType;
+import by.itacademy.news.controller.constants.PathType;
 import by.itacademy.news.service.INewsService;
 import by.itacademy.news.service.NewsServiceException;
 import by.itacademy.news.service.ServiceProvider;
-import by.itacademy.news.util.validation.ParamToStringParser;
+import by.itacademy.news.util.parsing.ParamToStringParser;
 import by.itacademy.news.util.validation.PermissionDeniedException;
 import by.itacademy.news.util.validation.PermissionsChecker;
 import jakarta.servlet.ServletException;

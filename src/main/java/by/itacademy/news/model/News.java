@@ -2,6 +2,8 @@ package by.itacademy.news.model;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Date;
+import java.util.Objects;
 
 public class News {
 
@@ -9,7 +11,7 @@ public class News {
     private String title;
     private String briefNews;
     private String content;
-    private String newsDate;
+    private Date newsDate;
 
     private String imagePath;
 
@@ -20,7 +22,8 @@ public class News {
         this.briefNews = briefNews;
         this.content = content;
         this.imagePath = imagePath;
-        this.newsDate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm"));
+        this.newsDate = new Date();
+//        .format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm"));
     }
 
 
@@ -63,12 +66,12 @@ public class News {
     }
 
 
-    public String getNewsDate() {
+    public Date getNewsDate() {
         return newsDate;
     }
 
 
-    public void setNewsDate(String newsDate) {
+    public void setNewsDate(Date newsDate) {
         this.newsDate = newsDate;
     }
 
@@ -78,5 +81,18 @@ public class News {
 
     public void setImagePath(String imagePath) {
         this.imagePath = imagePath;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        News news = (News) o;
+        return Objects.equals(id, news.id) && Objects.equals(title, news.title) && Objects.equals(briefNews, news.briefNews) && Objects.equals(content, news.content) && Objects.equals(newsDate, news.newsDate) && Objects.equals(imagePath, news.imagePath);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, title, briefNews, content, newsDate, imagePath);
     }
 }

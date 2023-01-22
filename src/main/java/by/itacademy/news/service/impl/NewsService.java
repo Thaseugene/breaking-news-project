@@ -5,12 +5,13 @@ import by.itacademy.news.repository.INewsRepository;
 import by.itacademy.news.repository.NewsRepositoryException;
 import by.itacademy.news.repository.RepositoryProvider;
 import by.itacademy.news.service.INewsService;
+import by.itacademy.news.service.NewsCompareType;
 import by.itacademy.news.service.NewsServiceException;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 public class NewsService implements INewsService {
 
@@ -25,8 +26,8 @@ public class NewsService implements INewsService {
     public List<News> getAllNews() throws NewsServiceException {
         try {
             List<News> newsList = new ArrayList<>(newsRepository.getNewsFromData().values());
-            Collections.reverse(newsList);
-            return newsList;
+
+            return newsList.stream().sorted(NewsCompareType.BY_DATE.getComparator()).collect(Collectors.toList());
         } catch (NewsRepositoryException e) {
             throw new NewsServiceException(e);
         }

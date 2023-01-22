@@ -22,7 +22,7 @@
 </div>
 <div class="footer-copyright">
     <div class="container">
-        © 2023 24 ${newsLabel}
+        2023 24 ${newsLabel}
         <a class="grey-text text-lighten-4 right" href="#!">${moreLinks}</a>
     </div>
 </div>

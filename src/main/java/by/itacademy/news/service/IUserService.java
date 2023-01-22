@@ -1,7 +1,7 @@
 package by.itacademy.news.service;
 
 import by.itacademy.news.model.User;
-import by.itacademy.news.model.enums.Role;
+import by.itacademy.news.model.constants.Role;
 
 public interface IUserService {
 

@@ -1,4 +1,4 @@
-package by.itacademy.news.controller.enums;
+package by.itacademy.news.controller.constants;
 
 public enum PathType {
     BASE_LAYOUT ("WEB-INF/pages/layouts/baseLayout.jsp"),

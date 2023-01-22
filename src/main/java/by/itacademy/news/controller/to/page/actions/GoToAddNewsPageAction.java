@@ -1,8 +1,8 @@
 package by.itacademy.news.controller.to.page.actions;
 
 import by.itacademy.news.controller.IAction;
-import by.itacademy.news.controller.enums.ParameterType;
-import by.itacademy.news.controller.enums.PathType;
+import by.itacademy.news.controller.constants.ParameterType;
+import by.itacademy.news.controller.constants.PathType;
 import by.itacademy.news.util.validation.PermissionDeniedException;
 import by.itacademy.news.util.validation.PermissionsChecker;
 import jakarta.servlet.ServletException;
@@ -23,7 +23,6 @@ public class GoToAddNewsPageAction implements IAction {
                 request.setAttribute(ParameterType.PRESENTATION.getParameter(), ParameterType.ADD_NEWS.getParameter());
                 request.getRequestDispatcher(PathType.BASE_LAYOUT.getPath()).forward(request, response);
 
-                request.getSession(true).removeAttribute(ParameterType.ERROR.getParameter());
             }
         } catch (PermissionDeniedException e) {
             request.setAttribute(ParameterType.EXCEPTION_MSG.getParameter(), e.getMessage());

@@ -2,9 +2,8 @@ package by.itacademy.news.repository;
 
 import java.util.Map;
 
-import by.itacademy.news.data.UserDataException;
 import by.itacademy.news.model.User;
-import by.itacademy.news.model.enums.Role;
+import by.itacademy.news.model.constants.Role;
 
 public interface IUserRepository {
 	

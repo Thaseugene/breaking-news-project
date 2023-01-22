@@ -1,14 +1,14 @@
 package by.itacademy.news.controller.edit.news.actions;
 
 import by.itacademy.news.controller.IAction;
-import by.itacademy.news.controller.enums.OutputMessage;
-import by.itacademy.news.controller.enums.ParameterType;
-import by.itacademy.news.controller.enums.PathType;
+import by.itacademy.news.controller.constants.OutputMessage;
+import by.itacademy.news.controller.constants.ParameterType;
+import by.itacademy.news.controller.constants.PathType;
 import by.itacademy.news.service.INewsService;
 import by.itacademy.news.service.NewsServiceException;
 import by.itacademy.news.service.ServiceProvider;
 import by.itacademy.news.util.validation.ContentChecker;
-import by.itacademy.news.util.validation.ParamToStringParser;
+import by.itacademy.news.util.parsing.ParamToStringParser;
 import by.itacademy.news.util.validation.PermissionDeniedException;
 import by.itacademy.news.util.validation.PermissionsChecker;
 import jakarta.servlet.ServletException;
@@ -47,7 +47,8 @@ public class AddNewsAction implements IAction {
                     String openPath = FOLDER_IMAGE_PATH + imagePart.getSubmittedFileName();
                     imagePart.write(path);
                     newsService.addNews(title, brief, content, openPath);
-                    response.sendRedirect(PathType.NEWS_LIST.getPath());
+                    doResponse(response, ParameterType.ADD_MSG_PAR.getParameter(),
+                            OutputMessage.NEWS_ADDED_MSG.getMessage(), PathType.NEWS_LIST.getPath());
                 }
             }
         } catch (NewsServiceException | PermissionDeniedException e) {

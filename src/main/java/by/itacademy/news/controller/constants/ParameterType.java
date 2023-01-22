@@ -1,4 +1,4 @@
-package by.itacademy.news.controller.enums;
+package by.itacademy.news.controller.constants;
 
 public enum ParameterType {
     TITTLE ("title"),
@@ -29,6 +29,8 @@ public enum ParameterType {
     ACTION ("action"),
     EXCEPTION_MSG("exceptionMessage"),
     LAST_ACTION ("lastAction"),
+    ADD_MSG_PAR ("addMessage"),
+    SAVE_MSG_PAR ("saveMessage"),
     LANGUAGE ("language"),
     GET_METHOD_TYPE ("GET");
 

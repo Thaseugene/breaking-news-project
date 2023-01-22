@@ -59,5 +59,6 @@
 <script src="js/materialize.js"></script>
 <script src="js/init.js"></script>
 <script src="js/modal.js"></script>
+<script src="js/toast.js"></script>
 </body>
 </html>

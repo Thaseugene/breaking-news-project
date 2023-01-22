@@ -1,4 +1,4 @@
-package by.itacademy.news.controller.enums;
+package by.itacademy.news.controller.constants;
 
 public enum ActionType {
 	GO_TO_BASE_PAGE,

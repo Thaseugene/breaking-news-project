@@ -1,17 +1,18 @@
 package by.itacademy.news.controller.auth.actions;
 
 import by.itacademy.news.controller.IAction;
-import by.itacademy.news.controller.enums.OutputMessage;
-import by.itacademy.news.controller.enums.ParameterType;
-import by.itacademy.news.controller.enums.PathType;
-import by.itacademy.news.model.enums.Role;
+import by.itacademy.news.controller.constants.OutputMessage;
+import by.itacademy.news.controller.constants.ParameterType;
+import by.itacademy.news.controller.constants.PathType;
+import by.itacademy.news.model.constants.Role;
 import by.itacademy.news.service.IUserService;
 import by.itacademy.news.service.ServiceProvider;
 import by.itacademy.news.service.UserServiceException;
-import by.itacademy.news.util.validation.ParamToStringParser;
+import by.itacademy.news.util.parsing.ParamToStringParser;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
 
@@ -34,12 +35,13 @@ public class SignInAction implements IAction {
                 String name = userService.getUserByLogin(login).getName();
                 String surname = userService.getUserByLogin(login).getSurname();
                 String email = userService.getUserByLogin(login).getEmail();
+                HttpSession session = request.getSession();
 
-                request.getSession(true).setAttribute(ParameterType.USER.getParameter(), OutputMessage.ACTIVE.getMessage());
-                request.getSession().setAttribute(ParameterType.ROLE.getParameter(), role.toString().toLowerCase());
-                request.getSession().setAttribute(ParameterType.NAME.getParameter(), name);
-                request.getSession().setAttribute(ParameterType.SURNAME.getParameter(), surname);
-                request.getSession().setAttribute(ParameterType.EMAIL.getParameter(), email);
+                session.setAttribute(ParameterType.USER.getParameter(), OutputMessage.ACTIVE.getMessage());
+                session.setAttribute(ParameterType.ROLE.getParameter(), role.toString().toLowerCase());
+                session.setAttribute(ParameterType.NAME.getParameter(), name);
+                session.setAttribute(ParameterType.SURNAME.getParameter(), surname);
+                session.setAttribute(ParameterType.EMAIL.getParameter(), email);
 
                 response.sendRedirect(PathType.NEWS_LIST.getPath());
 

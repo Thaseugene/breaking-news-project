@@ -1,14 +1,14 @@
 package by.itacademy.news.controller.auth.actions;
 
 import by.itacademy.news.controller.IAction;
-import by.itacademy.news.controller.enums.OutputMessage;
-import by.itacademy.news.controller.enums.ParameterType;
-import by.itacademy.news.controller.enums.PathType;
+import by.itacademy.news.controller.constants.OutputMessage;
+import by.itacademy.news.controller.constants.ParameterType;
+import by.itacademy.news.controller.constants.PathType;
 import by.itacademy.news.service.IUserService;
 import by.itacademy.news.service.ServiceProvider;
 import by.itacademy.news.service.UserServiceException;
 import by.itacademy.news.util.validation.ContentChecker;
-import by.itacademy.news.util.validation.ParamToStringParser;
+import by.itacademy.news.util.parsing.ParamToStringParser;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

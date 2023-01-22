@@ -1,8 +1,8 @@
 package by.itacademy.news.util.validation;
 
-import by.itacademy.news.controller.enums.ParameterType;
-import by.itacademy.news.model.enums.Permission;
-import by.itacademy.news.model.enums.Role;
+import by.itacademy.news.controller.constants.ParameterType;
+import by.itacademy.news.model.constants.Permission;
+import by.itacademy.news.model.constants.Role;
 import jakarta.servlet.http.HttpServletRequest;
 
 public class PermissionsChecker {

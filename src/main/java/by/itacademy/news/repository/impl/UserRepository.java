@@ -4,7 +4,7 @@ import by.itacademy.news.data.DataProvider;
 import by.itacademy.news.data.IUserData;
 import by.itacademy.news.data.UserDataException;
 import by.itacademy.news.model.User;
-import by.itacademy.news.model.enums.Role;
+import by.itacademy.news.model.constants.Role;
 import by.itacademy.news.repository.IUserRepository;
 import by.itacademy.news.repository.UserRepositoryException;
 

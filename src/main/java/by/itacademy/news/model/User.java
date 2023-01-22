@@ -1,6 +1,6 @@
 package by.itacademy.news.model;
 
-import by.itacademy.news.model.enums.Role;
+import by.itacademy.news.model.constants.Role;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -28,7 +28,6 @@ public class User {
 	public String getLogin() {
         return login;
     }
-
 
     public String getPassword() {
         return password;
@@ -72,4 +71,16 @@ public class User {
 		return registerDate;
 	}
 
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		User user = (User) o;
+		return Objects.equals(name, user.name) && Objects.equals(surname, user.surname) && Objects.equals(email, user.email) && Objects.equals(login, user.login) && Objects.equals(password, user.password) && Objects.equals(registerDate, user.registerDate) && role == user.role;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(name, surname, email, login, password, registerDate, role);
+	}
 }

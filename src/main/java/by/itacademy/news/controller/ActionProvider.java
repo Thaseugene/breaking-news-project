@@ -6,7 +6,7 @@ import by.itacademy.news.controller.auth.actions.SignOutAction;
 import by.itacademy.news.controller.edit.news.actions.AddNewsAction;
 import by.itacademy.news.controller.edit.news.actions.DeleteNewsAction;
 import by.itacademy.news.controller.edit.news.actions.SaveNewsAction;
-import by.itacademy.news.controller.enums.ActionType;
+import by.itacademy.news.controller.constants.ActionType;
 import by.itacademy.news.controller.lang.actions.ChangeLanguageAction;
 import by.itacademy.news.controller.to.page.actions.*;
 

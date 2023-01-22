@@ -3,7 +3,7 @@ package by.itacademy.news.data.impl;
 import by.itacademy.news.data.IUserData;
 import by.itacademy.news.data.UserDataException;
 import by.itacademy.news.model.User;
-import by.itacademy.news.model.enums.Role;
+import by.itacademy.news.model.constants.Role;
 
 import java.util.HashMap;
 import java.util.Map;

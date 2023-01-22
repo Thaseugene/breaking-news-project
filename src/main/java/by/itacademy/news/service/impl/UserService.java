@@ -1,7 +1,7 @@
 package by.itacademy.news.service.impl;
 
 import by.itacademy.news.model.User;
-import by.itacademy.news.model.enums.Role;
+import by.itacademy.news.model.constants.Role;
 import by.itacademy.news.repository.IUserRepository;
 import by.itacademy.news.repository.RepositoryProvider;
 import by.itacademy.news.repository.UserRepositoryException;
