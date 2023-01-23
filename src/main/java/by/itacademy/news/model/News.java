@@ -1,13 +1,13 @@
 package by.itacademy.news.model;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import java.io.Serializable;
 import java.util.Date;
 import java.util.Objects;
 
-public class News {
+public class News implements Serializable{
 
-    private String id;
+	private static final long serialVersionUID = 1L;
+	private String id;
     private String title;
     private String briefNews;
     private String content;
@@ -23,7 +23,6 @@ public class News {
         this.content = content;
         this.imagePath = imagePath;
         this.newsDate = new Date();
-//        .format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm"));
     }
 
 
