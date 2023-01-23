@@ -1,6 +1,5 @@
 package by.itacademy.news.controller;
 
-
 import by.itacademy.news.controller.constants.ParameterType;
 import by.itacademy.news.controller.constants.PathType;
 import by.itacademy.news.util.parsing.ParamToStringParser;
