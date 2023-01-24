@@ -24,7 +24,8 @@ public class GoToEditNewsAction implements IAction {
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
             try {
-                if (permissionsChecker.isWritePermission(request)) {
+                String role = (String) (request.getSession().getAttribute(ParameterType.ROLE.getParameter()));
+                if (permissionsChecker.isWritePermission(role)) {
                     String id = request.getParameter(ParameterType.ID.getParameter());
                     News news = newsService.findById(id);
                     request.setAttribute(ParameterType.NEWS.getParameter(), news);

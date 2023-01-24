@@ -17,6 +17,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.Part;
 
 import java.io.IOException;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 public class AddNewsAction implements IAction {
 
@@ -32,7 +34,8 @@ public class AddNewsAction implements IAction {
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         try {
-            if (permissionsChecker.isWritePermission(request)) {
+            String role = (String) (request.getSession().getAttribute(ParameterType.ROLE.getParameter()));
+            if (permissionsChecker.isWritePermission(role)) {
 
                 String title = request.getParameter(ParameterType.TITTLE.getParameter());
                 String brief = request.getParameter(ParameterType.BRIEF.getParameter());

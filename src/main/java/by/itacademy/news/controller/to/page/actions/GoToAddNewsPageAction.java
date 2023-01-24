@@ -18,7 +18,8 @@ public class GoToAddNewsPageAction implements IAction {
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
-            if (permissionsChecker.isWritePermission(request)) {
+            String role = (String) (request.getSession().getAttribute(ParameterType.ROLE.getParameter()));
+            if (permissionsChecker.isWritePermission(role)) {
 
                 request.setAttribute(ParameterType.PRESENTATION.getParameter(), ParameterType.ADD_NEWS.getParameter());
                 request.getRequestDispatcher(PathType.BASE_LAYOUT.getPath()).forward(request, response);

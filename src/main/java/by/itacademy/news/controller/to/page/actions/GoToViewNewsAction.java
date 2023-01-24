@@ -23,7 +23,8 @@ public class GoToViewNewsAction implements IAction {
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
-            if (permissionsChecker.isReadPermission(request)) {
+            String role = (String) (request.getSession().getAttribute(ParameterType.ROLE.getParameter()));
+            if (permissionsChecker.isReadPermission(role)) {
                 String id = request.getParameter(ParameterType.ID.getParameter());
                 News news = newsService.findById(id);
 

@@ -28,7 +28,8 @@ public class SaveNewsAction implements IAction {
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         try {
-            if (permissionsChecker.isWritePermission(request)) {
+            String role = (String) (request.getSession().getAttribute(ParameterType.ROLE.getParameter()));
+            if (permissionsChecker.isWritePermission(role)) {
                 String title = request.getParameter(ParameterType.TITTLE.getParameter());
                 String briefNews = request.getParameter(ParameterType.BRIEF.getParameter());
                 String content = request.getParameter(ParameterType.CONTENT.getParameter());

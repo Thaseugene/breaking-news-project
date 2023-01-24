@@ -28,7 +28,8 @@ public class DeleteNewsAction implements IAction {
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
             try {
-                if (permissionsChecker.isWritePermission(request)) {
+                String role = (String) (request.getSession().getAttribute(ParameterType.ROLE.getParameter()));
+                if (permissionsChecker.isWritePermission(role)) {
                     List<String> deleteIndexList = Collections.list(request.getParameterNames()).stream()
                             .filter(x -> x.contains(ParameterType.DELETE.getParameter()))
                             .map(request::getParameter)

@@ -16,21 +16,27 @@ public class PermissionsChecker {
         return instance;
     }
 
-    public boolean isWritePermission(HttpServletRequest request) throws PermissionDeniedException {
+    public boolean isWritePermission(String userRole) throws PermissionDeniedException {
         try {
-            Role role = Role.valueOf(((String) (request.getSession().getAttribute(ParameterType.ROLE.getParameter())))
-                    .toUpperCase());
-            return role.getPermissions().contains(Permission.WRITE);
+            Role role = Role.valueOf((userRole).toUpperCase());
+            if (role.getPermissions().contains(Permission.WRITE)) {
+                return true;
+            } else {
+                throw new PermissionDeniedException("Permission denied");
+            }
         } catch (IllegalArgumentException | NullPointerException e) {
             throw new PermissionDeniedException("Permission denied");
         }
     }
 
-    public boolean isReadPermission(HttpServletRequest request) throws PermissionDeniedException {
+    public boolean isReadPermission(String userRole) throws PermissionDeniedException {
         try {
-            Role role = Role.valueOf(((String) (request.getSession().getAttribute(ParameterType.ROLE.getParameter())))
-                    .toUpperCase());
-            return role.getPermissions().contains(Permission.READ);
+            Role role = Role.valueOf(userRole.toUpperCase());
+            if (role.getPermissions().contains(Permission.READ)) {
+                return true;
+            } else {
+                throw new PermissionDeniedException("Permission denied");
+            }
         } catch (IllegalArgumentException | NullPointerException e) {
             throw new PermissionDeniedException("Permission denied");
         }
