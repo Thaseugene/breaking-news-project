@@ -8,6 +8,7 @@ public enum OutputMessage {
     ACCOUNT_CREATED_MSG ("label.accCreated"),
     NEWS_ADDED_MSG ("label.newsAdded"),
     NEWS_SAVED_MSG ("label.newsSaved"),
+    WRONG_MSG ("Something wrong"),
 
     ACTIVE ("active"),
     NOT_ACTIVE ("not active");

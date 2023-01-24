@@ -15,7 +15,6 @@
                     <option value="en_US" <c:if test="${sessionScope.language eq 'en_US'}">selected</c:if>>${english}</option>
                     <option value="ru_RU" <c:if test="${sessionScope.language eq 'ru_RU'}">selected</c:if>>${russian}</option>
                 </select>
-                <input hidden name="lastAction" value="${sessionScope.lastAction}">
                 <input hidden name="action" value="change_lang">
             </form>
         </div>
