@@ -28,21 +28,28 @@ public class SaveNewsAction implements IAction {
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         try {
+
             String role = (String) (request.getSession().getAttribute(ParameterType.ROLE.getParameter()));
-            if (permissionsChecker.isWritePermission(role)) {
-                String title = request.getParameter(ParameterType.TITTLE.getParameter());
-                String briefNews = request.getParameter(ParameterType.BRIEF.getParameter());
-                String content = request.getParameter(ParameterType.CONTENT.getParameter());
-                String id = request.getParameter(ParameterType.ID.getParameter());
-                if (contentChecker.isEmpty(title, briefNews, content, id)) {
-                    doResponse(response, ParameterType.ERROR.getParameter(),
-                            OutputMessage.FIELDS_EMPTY_ERR.getMessage(), PathType.EDIT_NEWS_PAGE.getPath() + id);
-                } else {
-                    newsService.editNews(id, title, briefNews, content);
-                    String redirectPath = String.format("%s%s", PathType.VIEW_NEWS_PAGE.getPath(), id);
-                    doResponse(response, ParameterType.SAVE_MSG_PAR.getParameter(),
-                            OutputMessage.NEWS_SAVED_MSG.getMessage(), redirectPath);
+            String title = request.getParameter(ParameterType.TITTLE.getParameter());
+            String briefNews = request.getParameter(ParameterType.BRIEF.getParameter());
+            String content = request.getParameter(ParameterType.CONTENT.getParameter());
+            String id = request.getParameter(ParameterType.ID.getParameter());
+
+            if (contentChecker.isNull(role, title, briefNews, content, id)) {
+                if (permissionsChecker.isWritePermission(role)) {
+                    if (contentChecker.isEmpty(title, briefNews, content, id)) {
+                        doResponse(response, ParameterType.ERROR.getParameter(),
+                                OutputMessage.FIELDS_EMPTY_ERR.getMessage(), PathType.EDIT_NEWS_PAGE.getPath() + id);
+                    } else {
+                        newsService.editNews(id, title, briefNews, content);
+                        String redirectPath = String.format("%s%s", PathType.VIEW_NEWS_PAGE.getPath(), id);
+                        doResponse(response, ParameterType.SAVE_MSG_PAR.getParameter(),
+                                OutputMessage.NEWS_SAVED_MSG.getMessage(), redirectPath);
+                    }
                 }
+            } else {
+                doResponse(response, ParameterType.EXCEPTION_MSG.getParameter(), OutputMessage.WRONG_MSG.getMessage(),
+                        PathType.ERROR_PAGE.getPath());
             }
         } catch (NewsServiceException | PermissionDeniedException e) {
             doResponse(response, ParameterType.EXCEPTION_MSG.getParameter(), e.getMessage(),
