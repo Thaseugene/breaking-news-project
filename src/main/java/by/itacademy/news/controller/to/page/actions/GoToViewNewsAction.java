@@ -21,21 +21,32 @@ public class GoToViewNewsAction implements IAction {
 
     private final INewsService newsService = ServiceProvider.getInstance().getNewsService();
     private final PermissionsChecker permissionsChecker = PermissionsChecker.getInstance();
+    private final ContentChecker contentChecker = ContentChecker.getInstance();
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
             String role = (String) (request.getSession().getAttribute(ParameterType.ROLE.getParameter()));
                 if (permissionsChecker.isReadPermission(role)) {
                     String id = request.getParameter(ParameterType.ID.getParameter());
-                    News news = newsService.findById(id);
+                    if (!contentChecker.isEmpty(id)) {
+                        News news = newsService.findById(id);
 
-                    request.setAttribute(ParameterType.NEWS.getParameter(), news);
-                    request.setAttribute(ParameterType.PRESENTATION.getParameter(), ParameterType.VIEW_NEWS.getParameter());
-                    request.getRequestDispatcher(PathType.BASE_LAYOUT.getPath()).forward(request, response);
+                        request.setAttribute(ParameterType.NEWS.getParameter(), news);
+                        doResponse(request, ParameterType.PRESENTATION, ParameterType.VIEW_NEWS.getParameter(),
+                                PathType.BASE_LAYOUT, response);
+                    } else {
+                        doResponse(request, ParameterType.EXCEPTION_MSG, OutputMessage.WRONG_MSG.getMessage(),
+                                PathType.ERROR_PAGE, response);
+                    }
                 }
         } catch (NewsServiceException | PermissionDeniedException e) {
-            request.setAttribute(ParameterType.EXCEPTION_MSG.getParameter(), e.getMessage());
-            request.getRequestDispatcher(PathType.ERROR_PAGE.getPath()).forward(request, response);
+            doResponse(request, ParameterType.EXCEPTION_MSG, e.getMessage(), PathType.ERROR_PAGE, response);
         }
+    }
+
+    private void doResponse(HttpServletRequest request, ParameterType exceptionMsg, String WRONG_MSG, PathType errorPage,
+                            HttpServletResponse response) throws ServletException, IOException {
+        request.setAttribute(exceptionMsg.getParameter(), WRONG_MSG);
+        request.getRequestDispatcher(errorPage.getPath()).forward(request, response);
     }
 }
