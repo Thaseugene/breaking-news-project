@@ -21,14 +21,12 @@ public class GoToEditNewsAction implements IAction {
 
     private final INewsService newsService = ServiceProvider.getInstance().getNewsService();
     private final PermissionsChecker permissionsChecker = PermissionsChecker.getInstance();
-    private final ContentChecker contentChecker = ContentChecker.getInstance();
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
             try {
                 String role = (String) (request.getSession().getAttribute(ParameterType.ROLE.getParameter()));
-                if (contentChecker.isNull(role)) {
                     if (permissionsChecker.isWritePermission(role)) {
                         String id = request.getParameter(ParameterType.ID.getParameter());
                         News news = newsService.findById(id);
@@ -36,10 +34,6 @@ public class GoToEditNewsAction implements IAction {
                         request.setAttribute(ParameterType.PRESENTATION.getParameter(), ParameterType.EDIT_NEWS.getParameter());
                         request.getRequestDispatcher(PathType.BASE_LAYOUT.getPath()).forward(request, response);
                     }
-                } else {
-                    request.setAttribute(ParameterType.EXCEPTION_MSG.getParameter(), OutputMessage.WRONG_MSG.getMessage());
-                    request.getRequestDispatcher(PathType.ERROR_PAGE.getPath()).forward(request, response);
-                }
             } catch (NewsServiceException | PermissionDeniedException e) {
                 request.setAttribute(ParameterType.EXCEPTION_MSG.getParameter(), e.getMessage());
                 request.getRequestDispatcher(PathType.ERROR_PAGE.getPath()).forward(request, response);

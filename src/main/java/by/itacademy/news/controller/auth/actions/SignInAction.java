@@ -31,7 +31,7 @@ public class SignInAction implements IAction {
             String login = request.getParameter(ParameterType.LOGIN.getParameter());
             String password = request.getParameter(ParameterType.PASSWORD.getParameter());
 
-            if (!contentChecker.isNull(login, password)) {
+            if (!contentChecker.isEmpty(login, password)) {
                 Role role = userService.getAuthentication(login, password);
 
                 if (role.equals(Role.USER) || role.equals(Role.ADMIN)) {
@@ -49,8 +49,6 @@ public class SignInAction implements IAction {
 
                     response.sendRedirect(PathType.NEWS_LIST.getPath());
 
-                } else if (contentChecker.isEmpty(password, login)) {
-                    doResponse(request, ParameterType.ERROR.getParameter(), OutputMessage.FIELDS_EMPTY_ERR.getMessage(), response);
                 } else {
                     doResponse(request, ParameterType.ERROR.getParameter(), OutputMessage.INC_LOGIN_ERR.getMessage(), response);
                 }

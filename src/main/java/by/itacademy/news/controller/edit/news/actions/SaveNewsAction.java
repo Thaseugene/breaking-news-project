@@ -7,8 +7,8 @@ import by.itacademy.news.controller.constants.PathType;
 import by.itacademy.news.service.INewsService;
 import by.itacademy.news.service.NewsServiceException;
 import by.itacademy.news.service.ServiceProvider;
-import by.itacademy.news.util.validation.ContentChecker;
 import by.itacademy.news.util.parsing.ParamToStringParser;
+import by.itacademy.news.util.validation.ContentChecker;
 import by.itacademy.news.util.validation.PermissionDeniedException;
 import by.itacademy.news.util.validation.PermissionsChecker;
 import jakarta.servlet.ServletException;
@@ -30,26 +30,23 @@ public class SaveNewsAction implements IAction {
         try {
 
             String role = (String) (request.getSession().getAttribute(ParameterType.ROLE.getParameter()));
-            String title = request.getParameter(ParameterType.TITTLE.getParameter());
-            String briefNews = request.getParameter(ParameterType.BRIEF.getParameter());
-            String content = request.getParameter(ParameterType.CONTENT.getParameter());
-            String id = request.getParameter(ParameterType.ID.getParameter());
 
-            if (contentChecker.isNull(role, title, briefNews, content, id)) {
-                if (permissionsChecker.isWritePermission(role)) {
-                    if (contentChecker.isEmpty(title, briefNews, content, id)) {
-                        doResponse(response, ParameterType.ERROR.getParameter(),
-                                OutputMessage.FIELDS_EMPTY_ERR.getMessage(), PathType.EDIT_NEWS_PAGE.getPath() + id);
-                    } else {
-                        newsService.editNews(id, title, briefNews, content);
-                        String redirectPath = String.format("%s%s", PathType.VIEW_NEWS_PAGE.getPath(), id);
-                        doResponse(response, ParameterType.SAVE_MSG_PAR.getParameter(),
-                                OutputMessage.NEWS_SAVED_MSG.getMessage(), redirectPath);
-                    }
+            if (permissionsChecker.isWritePermission(role)) {
+
+                String title = request.getParameter(ParameterType.TITTLE.getParameter());
+                String briefNews = request.getParameter(ParameterType.BRIEF.getParameter());
+                String content = request.getParameter(ParameterType.CONTENT.getParameter());
+                String id = request.getParameter(ParameterType.ID.getParameter());
+
+                if (!contentChecker.isEmpty(title, briefNews, content, id)) {
+                    newsService.editNews(id, title, briefNews, content);
+                    String redirectPath = String.format("%s%s", PathType.VIEW_NEWS_PAGE.getPath(), id);
+                    doResponse(response, ParameterType.SAVE_MSG_PAR.getParameter(),
+                            OutputMessage.NEWS_SAVED_MSG.getMessage(), redirectPath);
+                } else {
+                    doResponse(response, ParameterType.ERROR.getParameter(),
+                            OutputMessage.FIELDS_EMPTY_ERR.getMessage(), PathType.EDIT_NEWS_PAGE.getPath() + id);
                 }
-            } else {
-                doResponse(response, ParameterType.EXCEPTION_MSG.getParameter(), OutputMessage.WRONG_MSG.getMessage(),
-                        PathType.ERROR_PAGE.getPath());
             }
         } catch (NewsServiceException | PermissionDeniedException e) {
             doResponse(response, ParameterType.EXCEPTION_MSG.getParameter(), e.getMessage(),
@@ -57,9 +54,8 @@ public class SaveNewsAction implements IAction {
         }
     }
 
-
     private void doResponse(HttpServletResponse response, String parameter, String message, String path) throws IOException {
-        String finalPath = String.format("%s&%s",path, toStringParser.convertToStringPath(parameter, message));
+        String finalPath = String.format("%s&%s", path, toStringParser.convertToStringPath(parameter, message));
         response.sendRedirect(finalPath);
     }
 

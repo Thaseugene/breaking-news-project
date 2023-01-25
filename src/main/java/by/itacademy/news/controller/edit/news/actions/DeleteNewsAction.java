@@ -25,14 +25,13 @@ public class DeleteNewsAction implements IAction {
     private final INewsService newsService = ServiceProvider.getInstance().getNewsService();
     private final PermissionsChecker permissionsChecker = PermissionsChecker.getInstance();
     private final ParamToStringParser toStringParser = ParamToStringParser.getInstance();
-    private final ContentChecker contentChecker = ContentChecker.getInstance();
+
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
             try {
                 String role = (String) (request.getSession().getAttribute(ParameterType.ROLE.getParameter()));
-                if (!contentChecker.isNull(role)) {
                     if (permissionsChecker.isWritePermission(role)) {
                         List<String> deleteIndexList = Collections.list(request.getParameterNames()).stream()
                                 .filter(x -> x.contains(ParameterType.DELETE.getParameter()))
@@ -41,16 +40,14 @@ public class DeleteNewsAction implements IAction {
                         newsService.deleteNews(deleteIndexList);
                         response.sendRedirect(PathType.NEWS_LIST.getPath());
                     }
-                } else {
-                    String path = String.format("%s&%s",PathType.ERROR_PAGE.getPath(),
-                            toStringParser.convertToStringPath(ParameterType.EXCEPTION_MSG.getParameter(),
-                                    OutputMessage.WRONG_MSG.getMessage()));
-                    response.sendRedirect(path);
-                }
             } catch (NewsServiceException | PermissionDeniedException e) {
-                String path = String.format("%s&%s",PathType.ERROR_PAGE.getPath(),
-                        toStringParser.convertToStringPath(ParameterType.EXCEPTION_MSG.getParameter(), e.getMessage()));
-                response.sendRedirect(path);
+                doResponse(e.getMessage(), response);
             }
+    }
+
+    private void doResponse(String message, HttpServletResponse response) throws IOException {
+        String path = String.format("%s&%s",PathType.ERROR_PAGE.getPath(),
+                toStringParser.convertToStringPath(ParameterType.EXCEPTION_MSG.getParameter(), message));
+        response.sendRedirect(path);
     }
 }

@@ -15,8 +15,14 @@ public class ContentChecker {
     }
 
     public boolean isEmpty(String... content) {
-        return Arrays.stream(content).anyMatch(String::isEmpty);
+        if (!isNull(content)) {
+            return Arrays.stream(content).anyMatch(String::isEmpty);
+        } else {
+            return true;
+        }
     }
 
-    public boolean isNull (String... content) {return Arrays.stream(content).anyMatch(Objects::nonNull);}
+    public boolean isNull (String... content) {
+        return Arrays.stream(content).noneMatch(Objects::nonNull);
+    }
 }

@@ -33,11 +33,10 @@ public class RegistrationAction implements IAction {
             String password = request.getParameter(ParameterType.PASSWORD.getParameter());
             String confirmPassword = request.getParameter(ParameterType.CONFIRM_PSWD.getParameter());
 
-            if (!contentChecker.isNull(name, surname, email, login, password, confirmPassword)) {
-                if (contentChecker.isEmpty(login, password, email, name, surname, confirmPassword)) {
-                    doResponse(response, ParameterType.ERROR.getParameter(), OutputMessage.FIELDS_EMPTY_ERR.getMessage());
 
-                } else if (!password.equals(confirmPassword)) {
+            if (!contentChecker.isEmpty(login, password, email, name, surname, confirmPassword)) {
+
+                if (!password.equals(confirmPassword)) {
                     doResponse(response, ParameterType.ERROR.getParameter(), OutputMessage.PSW_NOT_EQUAL_ERR.getMessage());
 
                 } else if (userService.checkIsLoginExists(login)) {

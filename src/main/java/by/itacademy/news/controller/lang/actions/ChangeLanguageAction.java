@@ -20,17 +20,13 @@ public class ChangeLanguageAction implements IAction {
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String path = (String) request.getSession().getAttribute(ParameterType.LAST_ACTION.getParameter());
         String langParam = request.getParameter(ParameterType.LANGUAGE.getParameter());
-        if (contentChecker.isNull(path, langParam)) {
-            if (!contentChecker.isEmpty(path, langParam)) {
-                request.getSession().setAttribute(ParameterType.LANGUAGE.getParameter(), langParam);
-                response.sendRedirect(PathType.CONTROLLER_PATH.getPath() + path);
-            } else {
-                request.setAttribute(ParameterType.EXCEPTION_MSG.getParameter(), OutputMessage.WRONG_MSG.getMessage());
-                request.getRequestDispatcher(PathType.ERROR_PAGE.getPath()).forward(request, response);
-            }
+        if (!contentChecker.isEmpty(path, langParam)) {
+            request.getSession().setAttribute(ParameterType.LANGUAGE.getParameter(), langParam);
+            response.sendRedirect(PathType.CONTROLLER_PATH.getPath() + path);
         } else {
             request.setAttribute(ParameterType.EXCEPTION_MSG.getParameter(), OutputMessage.WRONG_MSG.getMessage());
             request.getRequestDispatcher(PathType.ERROR_PAGE.getPath()).forward(request, response);
         }
+
     }
 }
