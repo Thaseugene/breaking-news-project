@@ -23,6 +23,6 @@ public class ContentChecker {
     }
 
     public boolean isNull (String... content) {
-        return Arrays.stream(content).noneMatch(Objects::nonNull);
+        return Arrays.stream(content).anyMatch(Objects::nonNull);
     }
 }
