@@ -8,6 +8,7 @@
         <nav class="z-depth-0">
             <div class="nav-wrapper black">
                 <a href="controller?action=go_to_news_list" class="brand-logo left-align white-text">24 ${newsLabel}</a>
+                <div class="col s2 offset-s6 white-text center-align" id="clock"></div>
             </div>
         </nav>
     </div>
