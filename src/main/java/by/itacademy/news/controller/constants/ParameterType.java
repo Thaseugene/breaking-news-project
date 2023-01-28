@@ -32,6 +32,8 @@ public enum ParameterType {
     ADD_MSG_PAR ("addMessage"),
     SAVE_MSG_PAR ("saveMessage"),
     LANGUAGE ("language"),
+    DATE ("date"),
+    TIME ("time"),
     GET_METHOD_TYPE ("GET");
 
     private final String param;

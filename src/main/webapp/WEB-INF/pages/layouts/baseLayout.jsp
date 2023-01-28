@@ -61,5 +61,6 @@
 <script src="js/modal.js"></script>
 <script src="js/toast.js"></script>
 <script src="js/realTime.js"></script>
+<script src="js/dateTime.js"></script>
 </body>
 </html>

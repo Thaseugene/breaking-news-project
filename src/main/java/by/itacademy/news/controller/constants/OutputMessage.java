@@ -2,6 +2,7 @@ package by.itacademy.news.controller.constants;
 
 public enum OutputMessage {
     INC_LOGIN_ERR ("label.incorrectLogin"),
+    INC_DATE_FORMAT ("label.incorrectDate"),
     FIELDS_EMPTY_ERR ("label.fieldsEmpty"),
     PSW_NOT_EQUAL_ERR ("label.notEqualPass"),
     ALREADY_EXISTS_ERR ("label.userExists"),

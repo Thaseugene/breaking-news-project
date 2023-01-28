@@ -49,4 +49,6 @@
 <fmt:message bundle="${loc}" key="label.registration" var="registration"/>
 <fmt:message bundle="${loc}" key="label.ru" var="russian"/>
 <fmt:message bundle="${loc}" key="label.en" var="english"/>
+<fmt:message bundle="${loc}" key="label.date" var="date"/>
+<fmt:message bundle="${loc}" key="label.time" var="time"/>
 

@@ -2,7 +2,7 @@ package by.itacademy.news.controller;
 
 import by.itacademy.news.controller.constants.ParameterType;
 import by.itacademy.news.controller.constants.PathType;
-import by.itacademy.news.util.parsing.ParamToStringParser;
+import by.itacademy.news.util.parsing.ParamParser;
 import by.itacademy.news.util.parsing.ParsingParamException;
 import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;
@@ -15,7 +15,7 @@ import java.util.Map;
 
 public class SessionFilter implements Filter {
 
-    private final ParamToStringParser toStringParser = ParamToStringParser.getInstance();
+    private final ParamParser paramParser = ParamParser.getInstance();
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
@@ -28,7 +28,7 @@ public class SessionFilter implements Filter {
                 Map<String, String> lastActionParams = new HashMap<>();
                 paramList.forEach(x -> lastActionParams.put(x, req.getParameter(x)));
                 req.getSession().setAttribute(ParameterType.LAST_ACTION.getParameter(),
-                        toStringParser.convertToStringPath(lastActionParams));
+                        paramParser.convertToStringPath(lastActionParams));
             } catch (ParsingParamException e) {
                 req.setAttribute(ParameterType.EXCEPTION_MSG.getParameter(), e.getMessage());
                 req.getRequestDispatcher(PathType.ERROR_PAGE.getPath()).forward(request, response);

@@ -1,15 +1,20 @@
 package by.itacademy.news.util.parsing;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 import java.util.Map;
 
-public class ParamToStringParser {
+public class ParamParser {
 
-    private static final ParamToStringParser instance = new ParamToStringParser();
+    private static final ParamParser instance = new ParamParser();
+    private final SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd hh:mm a", Locale.US);
 
-    private ParamToStringParser() {
+    private ParamParser() {
     }
 
-    public static ParamToStringParser getInstance() {
+    public static ParamParser getInstance() {
         return instance;
     }
 
@@ -25,6 +30,10 @@ public class ParamToStringParser {
 
     public String convertToStringPath(String paramName, String param) {
         return String.format("%s=%s",paramName, param);
+    }
+
+    public Date parseDate(String date, String time) throws ParseException {
+        return formatter.parse(String.format("%s %s", date, time));
     }
 
 }

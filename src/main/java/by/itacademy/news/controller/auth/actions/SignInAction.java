@@ -8,7 +8,7 @@ import by.itacademy.news.model.constants.Role;
 import by.itacademy.news.service.IUserService;
 import by.itacademy.news.service.ServiceProvider;
 import by.itacademy.news.service.UserServiceException;
-import by.itacademy.news.util.parsing.ParamToStringParser;
+import by.itacademy.news.util.parsing.ParamParser;
 import by.itacademy.news.util.validation.ContentChecker;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -20,7 +20,7 @@ import java.io.IOException;
 public class SignInAction implements IAction {
 
     private final IUserService userService = ServiceProvider.getInstance().getUserService();
-    private final ParamToStringParser toStringParser = ParamToStringParser.getInstance();
+    private final ParamParser paramParser = ParamParser.getInstance();
     private final ContentChecker contentChecker = ContentChecker.getInstance();
 
     @Override
@@ -57,7 +57,7 @@ public class SignInAction implements IAction {
             }
         } catch (UserServiceException e) {
             String path = String.format("%s&%s", PathType.ERROR_PAGE.getPath(),
-                    toStringParser.convertToStringPath(ParameterType.EXCEPTION_MSG.getParameter(), e.getMessage()));
+                    paramParser.convertToStringPath(ParameterType.EXCEPTION_MSG.getParameter(), e.getMessage()));
             response.sendRedirect(path);
         }
 
@@ -65,7 +65,7 @@ public class SignInAction implements IAction {
 
     private void doResponse(HttpServletRequest request, String parameter, String message, HttpServletResponse response) throws IOException {
         String path = String.format("%s&%s", PathType.AUTH_PAGE.getPath(),
-                toStringParser.convertToStringPath(parameter, message));
+                paramParser.convertToStringPath(parameter, message));
         request.getSession(true).setAttribute(ParameterType.USER.getParameter(), OutputMessage.NOT_ACTIVE.getMessage());
         response.sendRedirect(path);
     }

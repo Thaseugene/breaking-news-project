@@ -9,6 +9,7 @@ import by.itacademy.news.service.NewsCompareType;
 import by.itacademy.news.service.NewsServiceException;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -68,21 +69,21 @@ public class NewsService implements INewsService {
     }
 
     @Override
-    public void addNews(String title, String brief, String content, String imagePath) throws NewsServiceException {
+    public void addNews(String title, String brief, String content, String imagePath, Date newsDate) throws NewsServiceException {
         try {
             String id = String.valueOf(UUID.randomUUID());
-            newsRepository.addNewsToData(id, new News(id, title, brief, content, imagePath));
+            newsRepository.addNewsToData(id, new News(id, title, brief, content, imagePath, newsDate));
         } catch (NewsRepositoryException e) {
             throw new NewsServiceException(e);
         }
     }
 
     @Override
-    public News editNews(String id, String title, String briefNews, String content) throws NewsServiceException {
+    public void editNews(String id, String title, String briefNews, String content, Date newsDate) throws NewsServiceException {
         findById(id).setTitle(title);
         findById(id).setBriefNews(briefNews);
         findById(id).setContent(content);
-        return findById(id);
+        findById(id).setNewsDate(newsDate);
     }
 
 

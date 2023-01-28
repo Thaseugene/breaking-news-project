@@ -16,13 +16,13 @@ public class News implements Serializable{
     private String imagePath;
 
 
-    public News(String id, String title, String briefNews, String content, String imagePath) {
+    public News(String id, String title, String briefNews, String content, String imagePath, Date newsDate) {
         this.id = id;
         this.title = title;
         this.briefNews = briefNews;
         this.content = content;
         this.imagePath = imagePath;
-        this.newsDate = new Date();
+        this.newsDate = newsDate;
     }
 
 

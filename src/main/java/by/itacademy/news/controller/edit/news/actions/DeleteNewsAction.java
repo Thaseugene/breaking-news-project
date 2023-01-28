@@ -1,14 +1,12 @@
 package by.itacademy.news.controller.edit.news.actions;
 
 import by.itacademy.news.controller.IAction;
-import by.itacademy.news.controller.constants.OutputMessage;
 import by.itacademy.news.controller.constants.ParameterType;
 import by.itacademy.news.controller.constants.PathType;
 import by.itacademy.news.service.INewsService;
 import by.itacademy.news.service.NewsServiceException;
 import by.itacademy.news.service.ServiceProvider;
-import by.itacademy.news.util.parsing.ParamToStringParser;
-import by.itacademy.news.util.validation.ContentChecker;
+import by.itacademy.news.util.parsing.ParamParser;
 import by.itacademy.news.util.validation.PermissionDeniedException;
 import by.itacademy.news.util.validation.PermissionsChecker;
 import jakarta.servlet.ServletException;
@@ -24,7 +22,7 @@ public class DeleteNewsAction implements IAction {
 
     private final INewsService newsService = ServiceProvider.getInstance().getNewsService();
     private final PermissionsChecker permissionsChecker = PermissionsChecker.getInstance();
-    private final ParamToStringParser toStringParser = ParamToStringParser.getInstance();
+    private final ParamParser paramParser = ParamParser.getInstance();
 
 
     @Override
@@ -47,7 +45,7 @@ public class DeleteNewsAction implements IAction {
 
     private void doResponse(String message, HttpServletResponse response) throws IOException {
         String path = String.format("%s&%s",PathType.ERROR_PAGE.getPath(),
-                toStringParser.convertToStringPath(ParameterType.EXCEPTION_MSG.getParameter(), message));
+                paramParser.convertToStringPath(ParameterType.EXCEPTION_MSG.getParameter(), message));
         response.sendRedirect(path);
     }
 }

@@ -7,7 +7,7 @@ import by.itacademy.news.controller.constants.PathType;
 import by.itacademy.news.service.IUserService;
 import by.itacademy.news.service.ServiceProvider;
 import by.itacademy.news.service.UserServiceException;
-import by.itacademy.news.util.parsing.ParamToStringParser;
+import by.itacademy.news.util.parsing.ParamParser;
 import by.itacademy.news.util.validation.ContentChecker;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -19,7 +19,7 @@ public class RegistrationAction implements IAction {
 
     private final IUserService userService = ServiceProvider.getInstance().getUserService();
     private final ContentChecker contentChecker = ContentChecker.getInstance();
-    private final ParamToStringParser toStringParser = ParamToStringParser.getInstance();
+    private final ParamParser paramParser = ParamParser.getInstance();
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -51,7 +51,7 @@ public class RegistrationAction implements IAction {
             }
         } catch (UserServiceException e) {
             String path = String.format("%s&%s", PathType.ERROR_PAGE.getPath(),
-                    toStringParser.convertToStringPath(ParameterType.EXCEPTION_MSG.getParameter(), e.getMessage()));
+                    paramParser.convertToStringPath(ParameterType.EXCEPTION_MSG.getParameter(), e.getMessage()));
             response.sendRedirect(path);
         }
     }
@@ -59,7 +59,7 @@ public class RegistrationAction implements IAction {
     private void doResponse(HttpServletResponse response, String parameter, String message)
             throws IOException {
         String path = String.format("%s&%s", PathType.REG_PAGE.getPath(),
-                toStringParser.convertToStringPath(parameter, message));
+                paramParser.convertToStringPath(parameter, message));
         response.sendRedirect(path);
     }
 }

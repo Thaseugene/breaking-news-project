@@ -17,4 +17,5 @@ setInterval(function(){
     }
 
     clock.innerHTML = hours + ":" + minutes + ":" + seconds;
-}, 1000);
+}, 100);
+
