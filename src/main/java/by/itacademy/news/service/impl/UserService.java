@@ -8,6 +8,9 @@ import by.itacademy.news.repository.UserRepositoryException;
 import by.itacademy.news.service.IUserService;
 import by.itacademy.news.service.UserServiceException;
 
+import java.util.Date;
+import java.util.Random;
+
 public class UserService implements IUserService {
 
     private static final UserService instance = new UserService();
@@ -30,7 +33,7 @@ public class UserService implements IUserService {
     @Override
     public boolean checkIsLoginExists(String login) throws UserServiceException {
         try {
-            return userRepository.checkIsUserExists(login);
+            return userRepository.checkIsLoginExists(login);
         } catch (UserRepositoryException e) {
             throw new UserServiceException(e);
         }
@@ -39,16 +42,25 @@ public class UserService implements IUserService {
     @Override
     public void addNewUser(String name, String surname, String email, String login, String password) throws UserServiceException {
         try {
-            userRepository.addNewUser(new User(name, surname, email, login, password, Role.USER));
+            userRepository.addNewUser(new User(
+                    (new Random()).nextInt(),
+                    name,
+                    surname,
+                    email,
+                    login,
+                    password,
+                    Role.USER,
+                    new Date()));
         } catch (UserRepositoryException e) {
             throw new UserServiceException(e);
         }
     }
 
     @Override
-    public User getUserByLogin(String login) throws UserServiceException {
+    public User getUserByLoginAndPass(String login, String password) throws UserServiceException {
         try {
-        return userRepository.getUserByLogin(login);
+            int id = userRepository.getUsersIdByLogin(login, password);
+            return userRepository.getUserById(id);
         } catch (UserRepositoryException e) {
             throw new UserServiceException(e);
         }

@@ -4,29 +4,33 @@ import by.itacademy.news.model.constants.Role;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.Objects;
 
 public class User implements Serializable {
 
 	private static final long serialVersionUID = 1L;
+	private int id;
 	private String name;
 	private String surname;
 	private String email;
     private String login;
     private String password;
-	private final LocalDateTime registerDate;
+	private Date registerDate;
     private Role role;
 
-
-	public User(String name, String surname, String email, String login, String password, Role role) {
+	public User(int id, String name, String surname, String email, String login, String password, Role role, Date registerDate) {
+		this.id = id;
 		this.name = name;
 		this.surname = surname;
 		this.email = email;
 		this.login = login;
 		this.password = password;
 		this.role = role;
-		this.registerDate = LocalDateTime.now();
+		this.registerDate = registerDate;
 	}
+
+
 
 	public String getLogin() {
         return login;
@@ -70,8 +74,28 @@ public class User implements Serializable {
 		this.email = email;
 	}
 
-	public LocalDateTime getRegisterDate() {
+	public Date getRegisterDate() {
 		return registerDate;
+	}
+
+	public void setRegisterDate(Date registerDate) {
+		this.registerDate = registerDate;
+	}
+
+	public void setLogin(String login) {
+		this.login = login;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
 	}
 
 	@Override

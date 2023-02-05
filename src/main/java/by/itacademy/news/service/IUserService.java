@@ -11,6 +11,6 @@ public interface IUserService {
 
     void addNewUser(String name, String surname, String email, String login, String password) throws UserServiceException;
 
-    User getUserByLogin(String login) throws UserServiceException;
+    User getUserByLoginAndPass(String login, String password) throws UserServiceException;
 
 }

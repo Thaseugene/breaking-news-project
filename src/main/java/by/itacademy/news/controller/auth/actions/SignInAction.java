@@ -4,6 +4,7 @@ import by.itacademy.news.controller.IAction;
 import by.itacademy.news.controller.constants.OutputMessage;
 import by.itacademy.news.controller.constants.ParameterType;
 import by.itacademy.news.controller.constants.PathType;
+import by.itacademy.news.model.User;
 import by.itacademy.news.model.constants.Role;
 import by.itacademy.news.service.IUserService;
 import by.itacademy.news.service.ServiceProvider;
@@ -35,10 +36,11 @@ public class SignInAction implements IAction {
                 Role role = userService.getAuthentication(login, password);
 
                 if (role.equals(Role.USER) || role.equals(Role.ADMIN)) {
+                    User user = userService.getUserByLoginAndPass(login, password);
+                    String name = user.getName();
+                    String surname = user.getSurname();
+                    String email = user.getEmail();
 
-                    String name = userService.getUserByLogin(login).getName();
-                    String surname = userService.getUserByLogin(login).getSurname();
-                    String email = userService.getUserByLogin(login).getEmail();
                     HttpSession session = request.getSession();
 
                     session.setAttribute(ParameterType.USER.getParameter(), OutputMessage.ACTIVE.getMessage());
