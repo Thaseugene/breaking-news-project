@@ -2,6 +2,7 @@ package by.itacademy.news.repository.impl;
 
 import by.itacademy.news.model.User;
 import by.itacademy.news.model.constants.Role;
+import by.itacademy.news.repository.ConnectionBuilder;
 import by.itacademy.news.repository.IUserRepository;
 import by.itacademy.news.repository.UserRepositoryException;
 import by.itacademy.news.util.validation.ContentChecker;
@@ -12,13 +13,10 @@ public class UserRepository implements IUserRepository {
 
     private static final UserRepository instance = new UserRepository();
     private final ContentChecker contentChecker = ContentChecker.getInstance();
-    private static final String URL = "jdbc:mysql://localhost:3306/news_service_db?serverTimezone=UTC";
-    private static final String USERNAME = "root";
-    private static final String PASSWORD = "qayuzklhhy";
-    private Connection connection;
+    private final ConnectionBuilder connectionBuilder;
 
     private UserRepository() {
-
+        connectionBuilder = PoolConnectionBuilder.getInstance();
     }
 
     public static UserRepository getInstance() {
@@ -27,8 +25,7 @@ public class UserRepository implements IUserRepository {
 
     @Override
     public int getUsersIdByLogin(String login, String password) throws UserRepositoryException {
-        addDriver();
-        try (Connection connection = DriverManager.getConnection(URL, USERNAME, PASSWORD);
+        try (Connection connection = getConnection();
              PreparedStatement statement = connection.prepareStatement("SELECT id FROM users WHERE login = ? AND password = ?")) {
             statement.setString(1, login);
             statement.setString(2, password);
@@ -44,8 +41,8 @@ public class UserRepository implements IUserRepository {
     }
 
     public boolean checkIsLoginExists(String login) throws UserRepositoryException {
-        addDriver();
-        try (Connection connection = DriverManager.getConnection(URL, USERNAME, PASSWORD);
+
+        try (Connection connection = getConnection();
              PreparedStatement statement = connection.prepareStatement("SELECT id FROM users WHERE login = ?")) {
             statement.setString(1, login);
             ResultSet resultSet = statement.executeQuery();
@@ -57,8 +54,7 @@ public class UserRepository implements IUserRepository {
 
     @Override
     public boolean checkIsUserExists(String login, String password) throws UserRepositoryException {
-        addDriver();
-        try (Connection connection = DriverManager.getConnection(URL, USERNAME, PASSWORD);
+        try (Connection connection = getConnection();
              PreparedStatement statement = connection.prepareStatement("SELECT 1 FROM users WHERE login = ? AND password = ?")) {
             statement.setString(1, login);
             statement.setString(2, password);
@@ -80,9 +76,8 @@ public class UserRepository implements IUserRepository {
 
     @Override
     public User getUserById(int id) throws UserRepositoryException {
-        addDriver();
         User user = null;
-        try (Connection connection = DriverManager.getConnection(URL, USERNAME, PASSWORD);
+        try (Connection connection = getConnection();
              PreparedStatement statement = connection.prepareStatement(
                      "SELECT * FROM users \n" +
                              "JOIN user_details ON user_details.Users_id = users.id\n" +
@@ -110,10 +105,8 @@ public class UserRepository implements IUserRepository {
 
     @Override
     public void addNewUser(User user) throws UserRepositoryException {
-        addDriver();
         int roleId = getUsersRole(user);
-
-        try (Connection connection = DriverManager.getConnection(URL, USERNAME, PASSWORD)) {
+        try (Connection connection = getConnection()) {
             PreparedStatement statement1 = connection.prepareStatement(
                     "INSERT INTO users (login, password, email, role_id, is_active)  VALUES (?, ?, ?, ?, ?);",
                     Statement.RETURN_GENERATED_KEYS);
@@ -140,29 +133,9 @@ public class UserRepository implements IUserRepository {
         }
     }
 
-
-    private long getLastInsertId() throws SQLException {
-        try (Connection connection = DriverManager.getConnection(URL, USERNAME, PASSWORD);
-             PreparedStatement statement = connection.prepareStatement("SELECT LAST_INSERT_ID()")) {
-            try (ResultSet resultSet = statement.executeQuery()) {
-                resultSet.next();
-                return resultSet.getLong(1);
-            }
-        }
-    }
-
-    private void addDriver() throws UserRepositoryException {
-        try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-        } catch (ClassNotFoundException e) {
-            throw new UserRepositoryException(e);
-        }
-    }
-
     private int getUsersRole(User user) throws UserRepositoryException {
         int roleId = 0;
-        addDriver();
-        try (Connection connection = DriverManager.getConnection(URL, USERNAME, PASSWORD);
+        try (Connection connection = getConnection();
              PreparedStatement statement = connection.prepareStatement(
                      "SELECT id FROM news_service_db.role where role_name = ?;"
              )) {
@@ -177,4 +150,7 @@ public class UserRepository implements IUserRepository {
         return roleId;
     }
 
+    public Connection getConnection() throws SQLException {
+        return connectionBuilder.getConnection();
+    }
 }
