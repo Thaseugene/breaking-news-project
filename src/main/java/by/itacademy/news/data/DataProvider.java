@@ -5,7 +5,7 @@ import by.itacademy.news.data.impl.NewsData;
 public class DataProvider {
 	
 	private static final DataProvider instance = new DataProvider();
-	private final INewsData newsData = NewsData.getInstance();
+	private final INewsData newsData = new NewsData();
 	
 	private DataProvider() {
 	}

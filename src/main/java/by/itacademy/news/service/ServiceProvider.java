@@ -7,8 +7,8 @@ public class ServiceProvider {
 	
 	private static final ServiceProvider instance = new ServiceProvider();
 	
-	private final INewsService newsService = NewsService.getInstance();
-	private final IUserService userService = UserService.getInstance();
+	private final INewsService newsService = new NewsService();
+	private final IUserService userService = new UserService();
 	
 	private ServiceProvider() {}
 

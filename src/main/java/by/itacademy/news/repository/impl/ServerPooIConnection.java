@@ -1,6 +1,6 @@
 package by.itacademy.news.repository.impl;
 
-import by.itacademy.news.repository.ConnectionBuilder;
+import by.itacademy.news.repository.IConnectionBuilder;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
@@ -9,12 +9,12 @@ import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-public class PoolConnectionBuilder implements ConnectionBuilder {
+public class ServerPooIConnection implements IConnectionBuilder {
 
-    private static final PoolConnectionBuilder instance = new PoolConnectionBuilder();
+    private static final ServerPooIConnection instance = new ServerPooIConnection();
     private DataSource dataSource;
 
-    private PoolConnectionBuilder() {
+    private ServerPooIConnection() {
         try {
             Context ctx = new InitialContext();
             dataSource = (DataSource) ctx.lookup("java:comp/env/jdbc/breakingNewsProject");
@@ -24,11 +24,11 @@ public class PoolConnectionBuilder implements ConnectionBuilder {
     }
 
     @Override
-    public Connection getConnection() throws SQLException {
+    public Connection takeConnection() throws SQLException {
         return dataSource.getConnection();
     }
 
-    public static PoolConnectionBuilder getInstance() {
+    public static ServerPooIConnection getInstance() {
         return instance;
     }
 }

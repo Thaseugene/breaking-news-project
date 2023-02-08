@@ -10,11 +10,10 @@ import java.util.Map;
 
 public class NewsData implements INewsData {
 
-    private static final NewsData instance = new NewsData();
 
     private final Map<String, News> newsData;
 
-    private NewsData() {
+    public NewsData() {
         this.newsData = new LinkedHashMap<>();
         init();
     }
@@ -26,10 +25,6 @@ public class NewsData implements INewsData {
         } else {
             return newsData;
         }
-    }
-
-    public static NewsData getInstance() {
-        return instance;
     }
 
     private void init() {

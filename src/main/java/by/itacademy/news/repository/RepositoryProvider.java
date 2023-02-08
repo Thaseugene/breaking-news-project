@@ -7,8 +7,8 @@ public final class RepositoryProvider {
 
 	private static final RepositoryProvider instance = new RepositoryProvider();
 	
-	private final IUserRepository userRepository = UserRepository.getInstance();
-	private final INewsRepository newsRepository = NewsRepository.getInstance();
+	private final IUserRepository userRepository = new UserRepository();
+	private final INewsRepository newsRepository = new NewsRepository();
 	
 	private RepositoryProvider() {
 

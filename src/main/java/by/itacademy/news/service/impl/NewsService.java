@@ -16,11 +16,10 @@ import java.util.stream.Collectors;
 
 public class NewsService implements INewsService {
 
-    private static final NewsService instance = new NewsService();
 
     private final INewsRepository newsRepository = RepositoryProvider.getInstance().getNewsRepository();
 
-    private NewsService() {
+    public NewsService() {
     }
 
     @Override
@@ -84,11 +83,6 @@ public class NewsService implements INewsService {
         findById(id).setBriefNews(briefNews);
         findById(id).setContent(content);
         findById(id).setNewsDate(newsDate);
-    }
-
-
-    public static NewsService getInstance() {
-        return instance;
     }
 
 }

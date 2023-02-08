@@ -13,11 +13,9 @@ import java.util.Random;
 
 public class UserService implements IUserService {
 
-    private static final UserService instance = new UserService();
-
     private final IUserRepository userRepository = RepositoryProvider.getInstance().getUserRepository();
 
-    private UserService() {
+    public UserService() {
 
     }
 
@@ -64,9 +62,5 @@ public class UserService implements IUserService {
         } catch (UserRepositoryException e) {
             throw new UserServiceException(e);
         }
-    }
-
-    public static UserService getInstance() {
-        return instance;
     }
 }

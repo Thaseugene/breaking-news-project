@@ -11,11 +11,10 @@ import java.util.Map;
 
 public class NewsRepository implements INewsRepository {
 
-    private static final NewsRepository instance = new NewsRepository();
 
     private final INewsData newsData = DataProvider.getInstance().getNewsData();
 
-    private NewsRepository() {
+    public NewsRepository() {
     }
 
     @Override
@@ -44,10 +43,6 @@ public class NewsRepository implements INewsRepository {
         } catch (NewsDataException e) {
 			throw new NewsRepositoryException(e);
 		}
-    }
-
-    public static NewsRepository getInstance() {
-        return instance;
     }
 
     @Override
