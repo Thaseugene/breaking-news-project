@@ -14,7 +14,7 @@
 
 	<filter>
 		<filter-name>SessionFilter</filter-name>
-		<filter-class>by.itacademy.news.controller.SessionFilter</filter-class>
+		<filter-class>by.itacademy.news.controller.filter.SessionFilter</filter-class>
 	</filter>
 
 	<filter-mapping>
@@ -31,6 +31,7 @@
 			<file-size-threshold>5242880</file-size-threshold>
 		</multipart-config>
 	</servlet>
+
 	<servlet-mapping>
 		<servlet-name>Controller</servlet-name>
 		<url-pattern>/controller</url-pattern>

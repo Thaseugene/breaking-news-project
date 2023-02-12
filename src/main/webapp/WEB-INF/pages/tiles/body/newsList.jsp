@@ -21,9 +21,9 @@
                     <span class="card-title">${news.title}</span>
                     <div class="card-content left-align"><p>${news.briefNews}</p></div>
                     <span><i class="fab fa-google"></i><p class="left-align">
-                        <c:if test="${not empty news.newsDate}">
+                        <c:if test="${not empty news.publicationDate}">
                             <i class="tiny material-icons">access_time</i>
-                            <fmt:formatDate value="${news.newsDate}" type="date" pattern="EEEE dd MMMM yyyy HH:mm"/>
+                            <fmt:formatDate value="${news.publicationDate}" type="date" pattern="EEEE dd MMMM yyyy HH:mm"/>
                         </c:if>
                 </p></span>
                     <c:if test="${(sessionScope.user eq 'active')}">

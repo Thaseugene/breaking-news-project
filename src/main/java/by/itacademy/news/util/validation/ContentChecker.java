@@ -15,7 +15,6 @@ public class ContentChecker {
     }
 
     public boolean isEmpty(String... content) {
-
         if (!isNull(content)) {
             return Arrays.stream(content).anyMatch(String::isEmpty);
         } else {

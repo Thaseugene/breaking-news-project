@@ -1,15 +1,17 @@
 package by.itacademy.news.repository;
 
-import java.util.Map;
-
 import by.itacademy.news.model.News;
+
+import java.util.Date;
+import java.util.List;
 
 public interface INewsRepository {
 	
-	Map<String, News> getNewsFromData() throws NewsRepositoryException;
-	void addNewsToData(String id, News news) throws NewsRepositoryException;
-	void deleteNewsFromData(String id) throws NewsRepositoryException;
-	News getNewsById(String id) throws NewsRepositoryException;
+	List<News> getAllNewsFromData() throws NewsRepositoryException;
+	void addNewsToData(News news) throws NewsRepositoryException;
+	void deleteNewsFromData(List<Integer> deleteNewsId) throws NewsRepositoryException;
+	News getNewsById(int newsId) throws NewsRepositoryException;
+	void updateNews(int id, String title, String briefNews, String content, Date newsDate) throws NewsRepositoryException;
 
-	
+
 }

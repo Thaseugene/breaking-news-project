@@ -3,7 +3,6 @@ package by.itacademy.news.model;
 import by.itacademy.news.model.constants.Role;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.Objects;
 
@@ -18,8 +17,9 @@ public class User implements Serializable {
     private String password;
 	private Date registerDate;
     private Role role;
+	private boolean isActive;
 
-	public User(int id, String name, String surname, String email, String login, String password, Role role, Date registerDate) {
+	public User(int id, String name, String surname, String email, String login, String password, Role role, Date registerDate, boolean isActive) {
 		this.id = id;
 		this.name = name;
 		this.surname = surname;
@@ -28,6 +28,7 @@ public class User implements Serializable {
 		this.password = password;
 		this.role = role;
 		this.registerDate = registerDate;
+		this.isActive = isActive;
 	}
 
 
@@ -98,16 +99,24 @@ public class User implements Serializable {
 		this.id = id;
 	}
 
+	public boolean isActive() {
+		return isActive;
+	}
+
+	public void setActive(boolean active) {
+		isActive = active;
+	}
+
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 		User user = (User) o;
-		return Objects.equals(name, user.name) && Objects.equals(surname, user.surname) && Objects.equals(email, user.email) && Objects.equals(login, user.login) && Objects.equals(password, user.password) && Objects.equals(registerDate, user.registerDate) && role == user.role;
+		return id == user.id && isActive == user.isActive && Objects.equals(name, user.name) && Objects.equals(surname, user.surname) && Objects.equals(email, user.email) && Objects.equals(login, user.login) && Objects.equals(password, user.password) && Objects.equals(registerDate, user.registerDate) && role == user.role;
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(name, surname, email, login, password, registerDate, role);
+		return Objects.hash(id, name, surname, email, login, password, registerDate, role, isActive);
 	}
 }

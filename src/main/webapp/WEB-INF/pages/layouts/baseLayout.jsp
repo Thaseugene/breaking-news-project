@@ -56,11 +56,13 @@
 
 <!--  Scripts-->
 <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+<script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
 <script src="js/materialize.js"></script>
 <script src="js/init.js"></script>
 <script src="js/modal.js"></script>
 <script src="js/toast.js"></script>
 <script src="js/realTime.js"></script>
 <script src="js/dateTime.js"></script>
+<script src="js/tiny.js"></script>
 </body>
 </html>

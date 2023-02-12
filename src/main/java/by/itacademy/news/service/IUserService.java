@@ -1,16 +1,12 @@
 package by.itacademy.news.service;
 
 import by.itacademy.news.model.User;
-import by.itacademy.news.model.constants.Role;
+import by.itacademy.news.service.exception.*;
 
 public interface IUserService {
 
-    Role getAuthentication(String login, String password) throws UserServiceException;
+    void addNewUser(String name, String surname, String email, String login, String password, String confirmPassword) throws UserServiceException, FieldsEmptyException, NotEqualPasswordException, UserExistsException;
 
-    boolean checkIsLoginExists(String login) throws UserServiceException;
-
-    void addNewUser(String name, String surname, String email, String login, String password) throws UserServiceException;
-
-    User getUserByLoginAndPass(String login, String password) throws UserServiceException;
+    User getUserByLoginAndPass(String login, String password) throws UserServiceException, FieldsEmptyException, IncorrectLoginException;
 
 }

@@ -18,7 +18,6 @@ public class PermissionsChecker {
     public boolean isWritePermission(String userRole) throws PermissionDeniedException {
         try {
             if (contentChecker.isNull(userRole)) {
-                System.out.println(userRole);
                 throw new PermissionDeniedException("Permission denied");
             } else {
                 Role role = Role.valueOf((userRole).toUpperCase());
@@ -49,4 +48,6 @@ public class PermissionsChecker {
             throw new PermissionDeniedException("Permission denied");
         }
     }
+
 }
+

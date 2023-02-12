@@ -6,18 +6,19 @@ import by.itacademy.news.repository.NewsRepositoryException;
 import by.itacademy.news.repository.RepositoryProvider;
 import by.itacademy.news.service.INewsService;
 import by.itacademy.news.service.NewsCompareType;
-import by.itacademy.news.service.NewsServiceException;
+import by.itacademy.news.service.exception.FieldsEmptyException;
+import by.itacademy.news.service.exception.NewsServiceException;
+import by.itacademy.news.util.validation.ContentChecker;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 public class NewsService implements INewsService {
 
 
     private final INewsRepository newsRepository = RepositoryProvider.getInstance().getNewsRepository();
+    private final ContentChecker contentChecker = ContentChecker.getInstance();
 
     public NewsService() {
     }
@@ -25,9 +26,13 @@ public class NewsService implements INewsService {
     @Override
     public List<News> getAllNews() throws NewsServiceException {
         try {
-            List<News> newsList = new ArrayList<>(newsRepository.getNewsFromData().values());
+            List<News> newsList = newsRepository.getAllNewsFromData();
 
-            return newsList.stream().sorted(NewsCompareType.BY_DATE.getComparator()).collect(Collectors.toList());
+            return newsList.stream()
+                    .filter(News::isActive)
+                    .sorted(NewsCompareType.BY_DATE.getComparator())
+                    .collect(Collectors.toList());
+
         } catch (NewsRepositoryException e) {
             throw new NewsServiceException(e);
         }
@@ -36,53 +41,59 @@ public class NewsService implements INewsService {
 
     @Override
     public List<News> latestNews() throws NewsServiceException {
-        if (!getAllNews().isEmpty()) {
-            List<News> latestNews = new ArrayList<>();
-            int newsCount = 5;
-            for (int i = 0; i < newsCount; i++) {
-                latestNews.add(getAllNews().get(i));
+        List<News> allNews = getAllNews();
+        if (!allNews.isEmpty()) {
+            int size = allNews.size();
+            int toIndex = Math.min(5, size);
+            return allNews.subList(0, toIndex);
+        } else {
+            throw new NewsServiceException("no data");
+        }
+    }
+
+    @Override
+    public News findById(int newsId) throws NewsServiceException {
+        try {
+            return newsRepository.getNewsById(newsId);
+        } catch (NewsRepositoryException e) {
+            throw new NewsServiceException(e);
+        }
+
+    }
+
+    @Override
+    public void deleteNews(List<Integer> deleteNewsId) throws NewsServiceException {
+        try {
+            newsRepository.deleteNewsFromData(deleteNewsId);
+        } catch (NewsRepositoryException e) {
+            throw new NewsServiceException(e);
+        }
+    }
+
+    @Override
+    public void addNews(int authorId, String title, String brief, String content, String imagePath, Date newsDate) throws NewsServiceException, FieldsEmptyException {
+        if (!contentChecker.isEmpty(title, brief, content, imagePath)) {
+            try {
+                newsRepository.addNewsToData(new News(0, title, brief, content, imagePath, newsDate, newsDate, true, authorId));
+            } catch (NewsRepositoryException | NumberFormatException e) {
+                throw new NewsServiceException(e);
             }
-            return latestNews;
-        } else throw new NewsServiceException("no data");
-    }
-
-    @Override
-    public News findById(String id) throws NewsServiceException {
-        try {
-            return newsRepository.getNewsById(id);
-        } catch (NewsRepositoryException e) {
-            throw new NewsServiceException(e);
+        } else {
+            throw new FieldsEmptyException();
         }
-
     }
 
     @Override
-    public void deleteNews(List<String> deleteNewsId) throws NewsServiceException {
+    public void editNews(String id, String title, String briefNews, String content, Date newsDate) throws NewsServiceException, FieldsEmptyException {
         try {
-            for (String id : deleteNewsId) {
-                newsRepository.deleteNewsFromData(id);
+            if (!contentChecker.isEmpty(title, briefNews, content, id)) {
+                newsRepository.updateNews(Integer.parseInt(id), title, briefNews, content, newsDate);
+            } else {
+                throw new FieldsEmptyException();
             }
-        } catch (NewsRepositoryException e) {
+        } catch (NewsRepositoryException | NumberFormatException e) {
             throw new NewsServiceException(e);
         }
-    }
-
-    @Override
-    public void addNews(String title, String brief, String content, String imagePath, Date newsDate) throws NewsServiceException {
-        try {
-            String id = String.valueOf(UUID.randomUUID());
-            newsRepository.addNewsToData(id, new News(id, title, brief, content, imagePath, newsDate));
-        } catch (NewsRepositoryException e) {
-            throw new NewsServiceException(e);
-        }
-    }
-
-    @Override
-    public void editNews(String id, String title, String briefNews, String content, Date newsDate) throws NewsServiceException {
-        findById(id).setTitle(title);
-        findById(id).setBriefNews(briefNews);
-        findById(id).setContent(content);
-        findById(id).setNewsDate(newsDate);
     }
 
 }

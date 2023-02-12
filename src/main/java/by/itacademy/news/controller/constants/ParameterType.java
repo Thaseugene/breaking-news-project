@@ -34,7 +34,8 @@ public enum ParameterType {
     LANGUAGE ("language"),
     DATE ("date"),
     TIME ("time"),
-    GET_METHOD_TYPE ("GET");
+    GET_METHOD_TYPE ("GET"),
+    POST_METHOD_TYPE ("POST");
 
     private final String param;
 
