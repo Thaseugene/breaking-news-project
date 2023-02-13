@@ -64,5 +64,6 @@
 <script src="js/realTime.js"></script>
 <script src="js/dateTime.js"></script>
 <script src="js/tiny.js"></script>
+<script src="js/preview.js"></script>
 </body>
 </html>

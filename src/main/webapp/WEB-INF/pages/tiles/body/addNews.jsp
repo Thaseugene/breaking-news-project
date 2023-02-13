@@ -4,12 +4,6 @@
 
 <html lang="${sessionScope.language}">
 
-<script>
-    function showPreview(url) {
-        document.getElementById("preview").src = url;
-    }
-</script>
-
 <div class="container">
     <br><br>
     <div class="row">
@@ -40,10 +34,10 @@
                 </div>
                 <br>
                 <div class="input-field col s12">
-                            <input type="text" name="image" id="imageUrl" class="validate" required onchange="showPreview(this.value)">
-                            <label for="imageUrl">${addImage}</label>
-                            <br><br>
-                            <img id="preview" src="">
+                    <input type="text" name="image" id="imageUrl" class="validate" required>
+                    <label for="imageUrl">${addImage}</label>
+                    <br><br>
+                    <img id="preview" src="">
                 </div>
                 <c:if test="${not (param.error eq null)}">
                     <p class="h6 center-align" style="color:red;"><fmt:message bundle="${loc}"
