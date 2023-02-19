@@ -1,12 +1,14 @@
 package by.itacademy.news.util.validation.news;
 
+import by.itacademy.news.util.validation.ValidationException;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class NewsValidationResult {
 
     private boolean isValid;
-    private List<Exception> errorMessages;
+    private final List<ValidationException> errorMessages;
 
     public NewsValidationResult() {
         this.errorMessages = new ArrayList<>();
@@ -20,11 +22,8 @@ public class NewsValidationResult {
         isValid = valid;
     }
 
-    public List<Exception> getErrorMessages() {
+    public List<ValidationException> getErrorMessages() {
         return errorMessages;
     }
 
-    public void setErrorMessages(List<Exception> errorMessages) {
-        this.errorMessages = errorMessages;
-    }
 }

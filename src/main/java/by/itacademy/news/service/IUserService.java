@@ -5,8 +5,8 @@ import by.itacademy.news.service.exception.*;
 
 public interface IUserService {
 
-    void addNewUser(String name, String surname, String email, String login, String password, String confirmPassword) throws UserServiceException, FieldsEmptyException, NotEqualPasswordException, UserExistsException;
+    void addNewUser(String name, String surname, String email, String login, String password, String confirmPassword) throws UserServiceException, UserExistsException, ValidationServiceException;
 
-    User getUserByLoginAndPass(String login, String password) throws UserServiceException, FieldsEmptyException, IncorrectLoginException;
+    User getUserByLoginAndPass(String login, String password) throws UserServiceException, IncorrectLoginException;
 
 }

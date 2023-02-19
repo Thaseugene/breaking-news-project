@@ -23,7 +23,8 @@
                     <span><i class="fab fa-google"></i><p class="left-align">
                         <c:if test="${not empty news.publicationDate}">
                             <i class="tiny material-icons">access_time</i>
-                            <fmt:formatDate value="${news.publicationDate}" type="date" pattern="EEEE dd MMMM yyyy HH:mm"/>
+                            <fmt:formatDate value="${news.publicationDate}" type="date"
+                                            pattern="EEEE dd MMMM yyyy"/>
                         </c:if>
                 </p></span>
                     <c:if test="${(sessionScope.user eq 'active')}">
@@ -73,6 +74,52 @@
                     </div>
                 </div>
                 </c:if>
+            </div>
+        </div>
     </form>
+</div>
+<div class="container">
+    <div class="row">
+        <div class="col s3 offset-s4 center-align">
+            <ul class="pagination">
+                <c:if test="${requestScope.numOfPages != 1}">
+                <c:if test="${requestScope.currentPage != 1}">
+                <li class="disabled"><a
+                        href="controller?action=go_to_news_list&currentPage=${requestScope.currentPage - 1}&countOfNewsOnPage=${requestScope.countOfNewsOnPage}"><i
+                        class="material-icons">chevron_left</i></a></li>
+                </c:if>
+                <c:forEach var="i" begin="1" end="${requestScope.numOfPages}">
+                <c:choose>
+                <c:when test="${requestScope.currentPage eq i}">
+                <li class="active"><a href="#!">${requestScope.currentPage}</a></li>
+                </c:when>
+                <c:otherwise>
+                <li class="waves-effect"><a
+                        href="controller?action=go_to_news_list&currentPage=${i}&countOfNewsOnPage=${requestScope.countOfNewsOnPage}">${i}</a>
+                </li>
+                </c:otherwise>
+                </c:choose>
+                </c:forEach>
+                <c:if test="${requestScope.currentPage != requestScope.numOfPages}">
+                <li class="waves-effect"><a
+                        href="controller?action=go_to_news_list&currentPage=${requestScope.currentPage + 1}&countOfNewsOnPage=${requestScope.countOfNewsOnPage}"><i
+                        class="material-icons">chevron_right</i></a></li>
+                </c:if>
+                </c:if>
+        </div>
+        <div class="col s2" style="margin-top: 5px">
+            <form action="controller" method="post">
+                <select id="countOfNewsOnPage" class="browser-default" name="countOfNewsOnPage" onchange="submit()">
+                    <option value="5" <c:if test="${requestScope.countOfNewsOnPage eq 5}">selected</c:if>>
+                        5 ${newsCount}</option>
+                    <option value="10" <c:if test="${requestScope.countOfNewsOnPage eq 10}">selected</c:if>>
+                        10 ${newsCount}</option>
+                </select>
+                <input hidden name="currentPage" value="1">
+                <input hidden name="action" value="go_to_news_list">
+            </form>
+        </div>
+        </ul>
+    </div>
 </div>
 </html>

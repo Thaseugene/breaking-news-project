@@ -1,4 +1,4 @@
-package by.itacademy.news.repository.impl;
+package by.itacademy.news.repository.impl.connection;
 
 import by.itacademy.news.repository.IConnectionBuilder;
 

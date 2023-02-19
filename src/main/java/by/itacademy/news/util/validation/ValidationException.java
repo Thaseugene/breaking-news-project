@@ -1,4 +1,4 @@
-package by.itacademy.news.util.validation.news;
+package by.itacademy.news.util.validation;
 
 public class ValidationException extends Exception{
 

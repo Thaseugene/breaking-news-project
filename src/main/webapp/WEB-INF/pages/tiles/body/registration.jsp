@@ -2,14 +2,14 @@
 <!DOCTYPE html>
 
 <html lang="${sessionScope.language}">
+
 <div class="container grey-text">
     <div class="row">
         <form class="col s8 offset-s2 card" action="controller" method="post">
             <div class="row">
                 <h5 class="center-align">${createNew}</h5>
                 <c:if test="${not (param.output eq null)}">
-                    <p class="h6 center-align" style="color:lightseagreen;"><fmt:message bundle="${loc}"
-                                                                                         key="${param.output}"/></p>
+                    <p class="h6 center-align" style="color:lightseagreen;"><fmt:message bundle="${loc}" key="${param.output}"/></p>
                 </c:if>
                 <div class="input-field col s6">
                     <input id="Name" type="text" class="validate" required name="name">
@@ -26,10 +26,12 @@
                 <div class="input-field col s12">
                     <input id="Login" type="text" class="validate" required name="login">
                     <label for="Login">${login}</label>
+                    <span class="helper-text" data-error="${wrong}" data-success="${right}">${loginPattern}</span>
                 </div>
                 <div class="input-field col s6">
                     <input id="Password" type="password" class="validate" required name="password">
                     <label for="Name">${password}</label>
+                    <span class="helper-text" data-error="${wrong}" data-success="${right}">${passwordPattern}</span>
                 </div>
                 <div class="input-field col s6">
                     <input id="Confirm password" type="password" class="validate" required name="confirmPassword">

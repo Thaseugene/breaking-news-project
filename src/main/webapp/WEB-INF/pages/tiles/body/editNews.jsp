@@ -26,9 +26,6 @@
                         <label for="textarea3">${date}</label>
                     </div>
                     <div class="input-field col s6">
-                        <input type="text" class="timepicker" id="textarea4" name="time"
-                               value="<fmt:formatDate value="${news.publicationDate}" type="date" pattern="HH:mm a"/>" .trim()">
-                        <label for="textarea4">${time}</label>
                     </div>
                     <div class="input-field col s12">
                         <textarea id="textarea5" class="materialize-textarea" name="content">${news.content}</textarea>

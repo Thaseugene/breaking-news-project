@@ -10,6 +10,8 @@ public enum OutputMessage {
     NEWS_ADDED_MSG ("label.newsAdded"),
     NEWS_SAVED_MSG ("label.newsSaved"),
     WRONG_MSG ("Something wrong"),
+    PERMISSION_DENIED("Permission denied"),
+    ACTION_NOT_FOUND("Action not found"),
 
     ACTIVE ("active"),
     NOT_ACTIVE ("not active");

@@ -7,10 +7,10 @@ import by.itacademy.news.controller.constants.PathType;
 import by.itacademy.news.model.User;
 import by.itacademy.news.service.IUserService;
 import by.itacademy.news.service.ServiceProvider;
-import by.itacademy.news.service.exception.FieldsEmptyException;
 import by.itacademy.news.service.exception.IncorrectLoginException;
 import by.itacademy.news.service.exception.UserServiceException;
 import by.itacademy.news.util.parsing.ParamParser;
+import by.itacademy.news.util.validation.ContentChecker;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -22,6 +22,7 @@ public class SignInAction implements IAction {
 
     private final IUserService userService = ServiceProvider.getInstance().getUserService();
     private final ParamParser paramParser = ParamParser.getInstance();
+    private final ContentChecker contentChecker = ContentChecker.getInstance();
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -31,20 +32,23 @@ public class SignInAction implements IAction {
             String login = request.getParameter(ParameterType.LOGIN.getParameter());
             String password = request.getParameter(ParameterType.PASSWORD.getParameter());
 
-            User user = userService.getUserByLoginAndPass(login, password);
+            if (!contentChecker.isEmpty(login, password)) {
 
-            HttpSession session = request.getSession();
+                User user = userService.getUserByLoginAndPass(login, password);
+                HttpSession session = request.getSession();
+                setUserSessionAttributes(user, session);
 
-            setUserSessionAttributes(user, session);
+                response.sendRedirect(PathType.NEWS_LIST.getPath());
 
-            response.sendRedirect(PathType.NEWS_LIST.getPath());
+            } else {
+                doResponse(request, ParameterType.ERROR.getParameter(), OutputMessage.FIELDS_EMPTY_ERR.getMessage(), response);
+            }
 
         } catch (UserServiceException e) {
             String path = String.format("%s&%s", PathType.ERROR_PAGE.getPath(),
                     paramParser.convertToStringPath(ParameterType.EXCEPTION_MSG.getParameter(), e.getMessage()));
             response.sendRedirect(path);
-        } catch (FieldsEmptyException e) {
-            doResponse(request, ParameterType.ERROR.getParameter(), OutputMessage.FIELDS_EMPTY_ERR.getMessage(), response);
+
         } catch (IncorrectLoginException e) {
             doResponse(request, ParameterType.ERROR.getParameter(), OutputMessage.INC_LOGIN_ERR.getMessage(), response);
         }

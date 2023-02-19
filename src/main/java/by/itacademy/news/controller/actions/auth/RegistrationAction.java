@@ -6,11 +6,9 @@ import by.itacademy.news.controller.constants.ParameterType;
 import by.itacademy.news.controller.constants.PathType;
 import by.itacademy.news.service.IUserService;
 import by.itacademy.news.service.ServiceProvider;
-import by.itacademy.news.service.exception.FieldsEmptyException;
-import by.itacademy.news.service.exception.NotEqualPasswordException;
-import by.itacademy.news.service.exception.UserExistsException;
-import by.itacademy.news.service.exception.UserServiceException;
+import by.itacademy.news.service.exception.*;
 import by.itacademy.news.util.parsing.ParamParser;
+import by.itacademy.news.util.validation.ContentChecker;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -21,6 +19,7 @@ public class RegistrationAction implements IAction {
 
     private final IUserService userService = ServiceProvider.getInstance().getUserService();
     private final ParamParser paramParser = ParamParser.getInstance();
+    private final ContentChecker contentChecker = ContentChecker.getInstance();
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -34,17 +33,21 @@ public class RegistrationAction implements IAction {
             String password = request.getParameter(ParameterType.PASSWORD.getParameter());
             String confirmPassword = request.getParameter(ParameterType.CONFIRM_PSWD.getParameter());
 
-            userService.addNewUser(name, surname, email, login, password, confirmPassword);
-            doResponse(response, PathType.REG_PAGE.getPath(), ParameterType.OUTPUT.getParameter(), OutputMessage.ACCOUNT_CREATED_MSG.getMessage());
+            if (!contentChecker.isEmpty(login, password, email, name, surname, confirmPassword)) {
+                if (!password.equals(confirmPassword)) {
+                    doResponse(response, PathType.REG_PAGE.getPath(), ParameterType.ERROR.getParameter(), OutputMessage.PSW_NOT_EQUAL_ERR.getMessage());
+                } else {
+                    userService.addNewUser(name, surname, email, login, password, confirmPassword);
+                    doResponse(response, PathType.REG_PAGE.getPath(), ParameterType.OUTPUT.getParameter(), OutputMessage.ACCOUNT_CREATED_MSG.getMessage());
+                }
+            } else {
+                doResponse(response, PathType.REG_PAGE.getPath(), ParameterType.ERROR.getParameter(), OutputMessage.FIELDS_EMPTY_ERR.getMessage());
+            }
 
         } catch (UserServiceException e) {
             doResponse(response, PathType.ERROR_PAGE.getPath(), ParameterType.EXCEPTION_MSG.getParameter(), e.getMessage());
-        } catch (NotEqualPasswordException e) {
-            doResponse(response, PathType.REG_PAGE.getPath(), ParameterType.ERROR.getParameter(), OutputMessage.PSW_NOT_EQUAL_ERR.getMessage());
-        } catch (FieldsEmptyException e) {
-            doResponse(response, PathType.REG_PAGE.getPath(), ParameterType.ERROR.getParameter(), OutputMessage.FIELDS_EMPTY_ERR.getMessage());
-        } catch (UserExistsException e) {
-            doResponse(response, PathType.REG_PAGE.getPath(), ParameterType.ERROR.getParameter(), OutputMessage.ALREADY_EXISTS_ERR.getMessage());
+        } catch (UserExistsException | ValidationServiceException e) {
+            doResponse(response, PathType.REG_PAGE.getPath(), ParameterType.ERROR.getParameter(), e.getMessage());
         }
     }
 

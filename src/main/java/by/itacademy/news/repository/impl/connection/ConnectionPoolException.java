@@ -1,4 +1,4 @@
-package by.itacademy.news.repository;
+package by.itacademy.news.repository.impl.connection;
 
 
 public class ConnectionPoolException extends Exception{

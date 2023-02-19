@@ -6,16 +6,21 @@ import by.itacademy.news.repository.IUserRepository;
 import by.itacademy.news.repository.RepositoryProvider;
 import by.itacademy.news.repository.UserRepositoryException;
 import by.itacademy.news.service.IUserService;
-import by.itacademy.news.service.exception.*;
-import by.itacademy.news.util.validation.ContentChecker;
+import by.itacademy.news.service.exception.IncorrectLoginException;
+import by.itacademy.news.service.exception.UserExistsException;
+import by.itacademy.news.service.exception.UserServiceException;
+import by.itacademy.news.service.exception.ValidationServiceException;
+import by.itacademy.news.util.validation.user.UserValidationResult;
+import by.itacademy.news.util.validation.user.impl.FullUserValidatorChain;
 
 import java.util.Date;
 import java.util.Random;
+import java.util.concurrent.Semaphore;
 
 public class UserService implements IUserService {
 
     private final IUserRepository userRepository = RepositoryProvider.getInstance().getUserRepository();
-    private final ContentChecker contentChecker = ContentChecker.getInstance();
+    private final Semaphore semaphore = new Semaphore(1);
 
     public UserService() {
 
@@ -24,58 +29,53 @@ public class UserService implements IUserService {
     @Override
     public void addNewUser(String name, String surname, String email, String login, String password, String confirmPassword) throws
             UserServiceException,
-            FieldsEmptyException,
-            NotEqualPasswordException,
-            UserExistsException {
-
-        if (!contentChecker.isEmpty(login, password, email, name, surname, confirmPassword)) {
-            if (password.equals(confirmPassword)) {
-                try {
-                    if (!userRepository.checkIsLoginExists(login)) {
-                        userRepository.addNewUser(new User(
-                                (new Random()).nextInt(),
-                                name,
-                                surname,
-                                email,
-                                login,
-                                password,
-                                Role.USER,
-                                new Date(),
-                                true));
-                    } else {
-                        throw new UserExistsException();
-                    }
-                } catch (UserRepositoryException e) {
-                    throw new UserServiceException(e);
+            UserExistsException,
+            ValidationServiceException {
+        try {
+            semaphore.acquire();
+            if (!userRepository.checkIsLoginExists(login)) {
+                User user = new User(
+                        (new Random()).nextInt(),
+                        name,
+                        surname,
+                        email,
+                        login,
+                        password,
+                        Role.USER,
+                        new Date(),
+                        true);
+                UserValidationResult result = new FullUserValidatorChain().validate(user);
+                if (result.isValid()) {
+                    userRepository.addNewUser(user);
+                } else {
+                    throw new ValidationServiceException(result.getErrorMessages().get(0).getMessage());
                 }
+
             } else {
-                throw new NotEqualPasswordException();
+                throw new UserExistsException("User with this login already exists");
             }
-        } else {
-            throw new FieldsEmptyException();
+        } catch (UserRepositoryException | InterruptedException e) {
+            throw new UserServiceException(e);
+        } finally {
+            semaphore.release();
         }
     }
 
     @Override
     public User getUserByLoginAndPass(String login, String password) throws
             UserServiceException,
-            FieldsEmptyException,
             IncorrectLoginException {
 
-        if (!contentChecker.isEmpty(login, password)) {
             try {
-                int id = userRepository.getUsersIdByLogin(login, password);
+                int id = userRepository.takeUsersIdByLogin(login, password);
                 if (id != 0) {
-                    return userRepository.getUserById(id);
+                    return userRepository.takeUserById(id);
                 } else {
                     throw new IncorrectLoginException();
                 }
             } catch (UserRepositoryException e) {
                 throw new UserServiceException(e);
             }
-        } else {
-            throw new FieldsEmptyException();
-        }
     }
 
 }

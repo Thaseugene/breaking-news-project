@@ -1,9 +1,8 @@
-package by.itacademy.news.repository.impl;
+package by.itacademy.news.repository.impl.connection;
 
 import by.itacademy.news.repository.IConnectionBuilder;
 
 import java.sql.*;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.ArrayBlockingQueue;
@@ -22,7 +21,6 @@ public class PoolConnection implements IConnectionBuilder {
     private static final int POOL_SIZE = 5;
 
     private PoolConnection() {
-        initPoolData();
     }
 
     public static PoolConnection getInstance() {
@@ -32,9 +30,7 @@ public class PoolConnection implements IConnectionBuilder {
         return instance;
     }
 
-    public void initPoolData() {
-        Locale.setDefault(Locale.ENGLISH);
-        try {
+    public void initPoolData() throws ClassNotFoundException, SQLException {
             Class.forName(DRIVER_NAME);
             givenAwayConQueue = new ArrayBlockingQueue<>(POOL_SIZE);
             connectionQueue = new ArrayBlockingQueue<>(POOL_SIZE);
@@ -43,12 +39,9 @@ public class PoolConnection implements IConnectionBuilder {
                 PooledConnection pooledConnection = new PooledConnection(connection);
                 connectionQueue.add(pooledConnection);
             }
-        } catch (SQLException | ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        }
     }
 
-    public Connection takeConnection() throws SQLException {
+    public synchronized Connection takeConnection() throws SQLException {
         Connection connection;
         try {
             connection = connectionQueue.take();
@@ -57,6 +50,29 @@ public class PoolConnection implements IConnectionBuilder {
             throw new SQLException(e);
         }
         return connection;
+    }
+
+    public void dispose() {
+        clearConnectionQueue();
+    }
+    private void clearConnectionQueue() {
+        try {
+            closeConnectionsQueue(givenAwayConQueue);
+            closeConnectionsQueue(connectionQueue);
+        } catch (SQLException e) {
+            // logger.log(Level.ERROR, "Error closing the connection.", e);
+        }
+    }
+
+    private void closeConnectionsQueue(BlockingQueue<Connection> queue)
+            throws SQLException {
+        Connection connection;
+        while ((connection = queue.poll()) != null) {
+            if (!connection.getAutoCommit()) {
+                connection.commit();
+            }
+            ((PooledConnection) connection).reallyClose();
+        }
     }
 
     private class PooledConnection implements Connection {
@@ -70,6 +86,10 @@ public class PoolConnection implements IConnectionBuilder {
         @Override
         public void clearWarnings() throws SQLException {
             connection.clearWarnings();
+        }
+
+        public void reallyClose() throws SQLException {
+            connection.close();
         }
 
         @Override

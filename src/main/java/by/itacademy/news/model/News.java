@@ -30,6 +30,13 @@ public class News implements Serializable{
         this.authorId = authorId;
     }
 
+    public News(int id, String title, String briefNews, String content, Date publicationDate) {
+        this.id = id;
+        this.title = title;
+        this.briefNews = briefNews;
+        this.content = content;
+        this.publicationDate = publicationDate;
+    }
 
     public int getId() {
         return id;
@@ -116,7 +123,10 @@ public class News implements Serializable{
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         News news = (News) o;
-        return authorId == news.authorId && isActive == news.isActive && Objects.equals(id, news.id) && Objects.equals(title, news.title) && Objects.equals(briefNews, news.briefNews) && Objects.equals(content, news.content) && Objects.equals(creationDate, news.creationDate) && Objects.equals(publicationDate, news.publicationDate) && Objects.equals(imagePath, news.imagePath);
+        return authorId == news.authorId && isActive == news.isActive && Objects.equals(id, news.id) &&
+                Objects.equals(title, news.title) && Objects.equals(briefNews, news.briefNews) &&
+                Objects.equals(content, news.content) && Objects.equals(creationDate, news.creationDate) &&
+                Objects.equals(publicationDate, news.publicationDate) && Objects.equals(imagePath, news.imagePath);
     }
 
     @Override

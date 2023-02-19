@@ -21,12 +21,10 @@
                     <label for="textarea2">${brief}</label>
                 </div>
                 <div class="input-field col s6">
-                    <input type="text" class="datepicker" id="textarea3" name="date">
+                    <input type="text" class="datepicker validate" required id="textarea3" name="date">
                     <label for="textarea3">${date}</label>
                 </div>
                 <div class="input-field col s6">
-                    <input type="text" class="timepicker" id="textarea4" name="time">
-                    <label for="textarea4">${time}</label>
                 </div>
                 <div class="input-field col s12">
                     <textarea id="textarea5" class="materialize-textarea" name="content"></textarea>

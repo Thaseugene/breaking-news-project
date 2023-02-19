@@ -4,21 +4,28 @@
       xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
       version="3.0">
 	<display-name>Archetype Created Web Application</display-name>
-
-	<resource-ref>
-		<description>DB connection</description>
-		<res-ref-name>jdbc/breakingNewsProject</res-ref-name>
-		<res-type>javax.sql.DataSource</res-type>
-		<res-auth>Container</res-auth>
-	</resource-ref>
+	
+	<listener>
+		<listener-class>by.itacademy.news.controller.listener.ConnectionPoolListener</listener-class>
+	</listener>
 
 	<filter>
-		<filter-name>SessionFilter</filter-name>
-		<filter-class>by.itacademy.news.controller.filter.ActionRecordsFilter</filter-class>
+		<filter-name>PermissionCheckFilter</filter-name>
+		<filter-class>by.itacademy.news.controller.filter.PermissionsCheckFilter</filter-class>
 	</filter>
 
 	<filter-mapping>
-		<filter-name>SessionFilter</filter-name>
+		<filter-name>PermissionCheckFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+
+	<filter>
+		<filter-name>ActionsRecordFilter</filter-name>
+		<filter-class>by.itacademy.news.controller.filter.ActionRecordFilter</filter-class>
+	</filter>
+
+	<filter-mapping>
+		<filter-name>ActionsRecordFilter</filter-name>
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>
 

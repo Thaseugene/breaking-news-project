@@ -6,11 +6,10 @@ import by.itacademy.news.controller.constants.ParameterType;
 import by.itacademy.news.controller.constants.PathType;
 import by.itacademy.news.service.INewsService;
 import by.itacademy.news.service.ServiceProvider;
-import by.itacademy.news.service.exception.FieldsEmptyException;
 import by.itacademy.news.service.exception.NewsServiceException;
+import by.itacademy.news.service.exception.ValidationServiceException;
 import by.itacademy.news.util.parsing.ParamParser;
-import by.itacademy.news.util.validation.PermissionDeniedException;
-import by.itacademy.news.util.validation.PermissionsChecker;
+import by.itacademy.news.util.validation.ContentChecker;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -21,8 +20,8 @@ import java.text.ParseException;
 public class SaveNewsAction implements IAction {
 
     private final INewsService newsService = ServiceProvider.getInstance().getNewsService();
-    private final PermissionsChecker permissionsChecker = PermissionsChecker.getInstance();
     private final ParamParser paramParser = ParamParser.getInstance();
+    private final ContentChecker contentChecker = ContentChecker.getInstance();
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -30,28 +29,28 @@ public class SaveNewsAction implements IAction {
         String id = null;
 
         try {
-            String role = (String) (request.getSession().getAttribute(ParameterType.ROLE.getParameter()));
 
+            String title = request.getParameter(ParameterType.TITTLE.getParameter());
+            String briefNews = request.getParameter(ParameterType.BRIEF.getParameter());
+            String content = request.getParameter(ParameterType.CONTENT.getParameter());
+            id = request.getParameter(ParameterType.ID.getParameter());
+            String date = request.getParameter(ParameterType.DATE.getParameter());
 
-            if (permissionsChecker.isWritePermission(role)) {
-                String title = request.getParameter(ParameterType.TITTLE.getParameter());
-                String briefNews = request.getParameter(ParameterType.BRIEF.getParameter());
-                String content = request.getParameter(ParameterType.CONTENT.getParameter());
-                id = request.getParameter(ParameterType.ID.getParameter());
-                String date = request.getParameter(ParameterType.DATE.getParameter());
-                String time = request.getParameter(ParameterType.TIME.getParameter());
-
-                newsService.editNews(id, title, briefNews, content, paramParser.parseDate(date, time));
+            if (!contentChecker.isEmpty(title, briefNews, content, id)) {
+                newsService.editNews(Integer.parseInt(id), title, briefNews, content, paramParser.parseDate(date));
                 String redirectPath = String.format("%s%s", PathType.VIEW_NEWS_PAGE.getPath(), id);
                 doResponse(response, ParameterType.SAVE_MSG_PAR.getParameter(),
                         OutputMessage.NEWS_SAVED_MSG.getMessage(), redirectPath);
+            } else {
+                doResponse(response, ParameterType.ERROR.getParameter(),
+                        OutputMessage.FIELDS_EMPTY_ERR.getMessage(), PathType.EDIT_NEWS_PAGE.getPath() + id);
             }
-        } catch (NewsServiceException | PermissionDeniedException e) {
+
+        } catch (NewsServiceException | ParseException | NumberFormatException e) {
             doResponse(response, ParameterType.EXCEPTION_MSG.getParameter(), e.getMessage(),
                     PathType.ERROR_PAGE.getPath());
-        } catch (FieldsEmptyException | ParseException e) {
-            doResponse(response, ParameterType.ERROR.getParameter(),
-                    OutputMessage.FIELDS_EMPTY_ERR.getMessage(), PathType.EDIT_NEWS_PAGE.getPath() + id);
+        } catch (ValidationServiceException e) {
+            doResponse(response, ParameterType.ERROR.getParameter(), e.getMessage(), PathType.EDIT_NEWS_PAGE.getPath() + id);
         }
     }
 

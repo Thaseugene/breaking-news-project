@@ -9,7 +9,7 @@ import java.util.Map;
 public class ParamParser {
 
     private static final ParamParser instance = new ParamParser();
-    private final SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd hh:mm a", Locale.US);
+    private final SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd", Locale.US);
 
     private ParamParser() {
     }
@@ -32,8 +32,8 @@ public class ParamParser {
         return String.format("%s=%s",paramName, param);
     }
 
-    public Date parseDate(String date, String time) throws ParseException {
-        return formatter.parse(String.format("%s %s", date, time));
+    public Date parseDate(String date) throws ParseException {
+        return formatter.parse(date);
     }
 
 }

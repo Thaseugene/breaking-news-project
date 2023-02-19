@@ -6,9 +6,12 @@ import by.itacademy.news.repository.NewsRepositoryException;
 import by.itacademy.news.repository.RepositoryProvider;
 import by.itacademy.news.service.INewsService;
 import by.itacademy.news.service.NewsCompareType;
-import by.itacademy.news.service.exception.FieldsEmptyException;
 import by.itacademy.news.service.exception.NewsServiceException;
-import by.itacademy.news.util.validation.ContentChecker;
+import by.itacademy.news.service.exception.ValidationServiceException;
+import by.itacademy.news.util.validation.news.NewsValidationResult;
+import by.itacademy.news.util.validation.news.impl.FullNewsValidatorChain;
+import by.itacademy.news.util.validation.news.impl.PartialNewsValidatorChain;
+import by.itacademy.news.util.validation.news.impl.fields.*;
 
 import java.util.Date;
 import java.util.List;
@@ -18,7 +21,6 @@ public class NewsService implements INewsService {
 
 
     private final INewsRepository newsRepository = RepositoryProvider.getInstance().getNewsRepository();
-    private final ContentChecker contentChecker = ContentChecker.getInstance();
 
     public NewsService() {
     }
@@ -26,7 +28,7 @@ public class NewsService implements INewsService {
     @Override
     public List<News> getAllNews() throws NewsServiceException {
         try {
-            List<News> newsList = newsRepository.getAllNewsFromData();
+            List<News> newsList = newsRepository.takeAllNewsFromData();
 
             return newsList.stream()
                     .filter(News::isActive)
@@ -36,29 +38,57 @@ public class NewsService implements INewsService {
         } catch (NewsRepositoryException e) {
             throw new NewsServiceException(e);
         }
-
     }
 
     @Override
-    public List<News> latestNews() throws NewsServiceException {
+    public List<News> getLatestNews() throws NewsServiceException {
         List<News> allNews = getAllNews();
         if (!allNews.isEmpty()) {
-            int size = allNews.size();
-            int toIndex = Math.min(5, size);
-            return allNews.subList(0, toIndex);
+            return allNews.subList(0, Math.min(5, allNews.size()));
         } else {
             throw new NewsServiceException("no data");
         }
     }
 
     @Override
+    public List<News> getPageNews(int countOfNewsOnPage, int currentPage) throws NewsServiceException {
+        try {
+            List<News> allNews = getAllNews();
+            if (!allNews.isEmpty()) {
+                return allNews.subList((countOfNewsOnPage * currentPage - countOfNewsOnPage),
+                        Math.min((countOfNewsOnPage * currentPage - 1), allNews.size()));
+            } else {
+                throw new NewsServiceException("no data");
+            }
+        } catch (IllegalArgumentException e) {
+            throw new NewsServiceException("Incorrect request", e);
+        }
+    }
+
+    @Override
     public News findById(int newsId) throws NewsServiceException {
         try {
-            return newsRepository.getNewsById(newsId);
+            return newsRepository.takeNewsById(newsId);
         } catch (NewsRepositoryException e) {
             throw new NewsServiceException(e);
         }
 
+    }
+
+    @Override
+    public int getCountOfPages(int countOfNewsOnPage) throws NewsServiceException {
+        List<News> allNews = getAllNews();
+        if (!allNews.isEmpty()) {
+            int numOfPages;
+            if (allNews.size() % countOfNewsOnPage == 0) {
+                numOfPages = allNews.size() / countOfNewsOnPage;
+            } else {
+                numOfPages = (allNews.size() / countOfNewsOnPage) + 1;
+            }
+            return numOfPages;
+        } else {
+            throw new NewsServiceException("no data");
+        }
     }
 
     @Override
@@ -71,26 +101,38 @@ public class NewsService implements INewsService {
     }
 
     @Override
-    public void addNews(int authorId, String title, String brief, String content, String imagePath, Date newsDate) throws NewsServiceException, FieldsEmptyException {
-        if (!contentChecker.isEmpty(title, brief, content, imagePath)) {
-            try {
-                newsRepository.addNewsToData(new News(0, title, brief, content, imagePath, newsDate, newsDate, true, authorId));
-            } catch (NewsRepositoryException | NumberFormatException e) {
-                throw new NewsServiceException(e);
+    public void addNews(int authorId, String title, String brief, String content, String imagePath, Date newsDate) throws NewsServiceException, ValidationServiceException {
+
+        try {
+            News news = new News(0, title, brief, content, imagePath, newsDate, newsDate, true, authorId);
+            NewsValidationResult result = new FullNewsValidatorChain().validate(news);
+            if (result.isValid()) {
+                newsRepository.addNewsToData(news);
+            } else {
+                throw new ValidationServiceException(result.getErrorMessages().get(0).getMessage());
             }
-        } else {
-            throw new FieldsEmptyException();
+        } catch (NewsRepositoryException e) {
+            throw new NewsServiceException(e);
         }
     }
 
     @Override
-    public void editNews(String id, String title, String briefNews, String content, Date newsDate) throws NewsServiceException, FieldsEmptyException {
+    public void editNews(int id, String title, String briefNews, String content, Date newsDate) throws NewsServiceException, ValidationServiceException {
         try {
-            if (!contentChecker.isEmpty(title, briefNews, content, id)) {
-                newsRepository.updateNews(Integer.parseInt(id), title, briefNews, content, newsDate);
+
+            News news = new News(id, title, briefNews, content, newsDate);
+            NewsValidationResult result = new PartialNewsValidatorChain(
+                    new IdNewsValidator(),
+                    new TitleNewsValidator(),
+                    new BriefNewsValidator(),
+                    new ContentValidator(),
+                    new PublicationDateValidator()).validate(news);
+            if (result.isValid()) {
+                newsRepository.updateNews(news);
             } else {
-                throw new FieldsEmptyException();
+                throw new ValidationServiceException(result.getErrorMessages().get(0).getMessage());
             }
+
         } catch (NewsRepositoryException | NumberFormatException e) {
             throw new NewsServiceException(e);
         }

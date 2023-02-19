@@ -13,7 +13,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class ActionRecordsFilter implements Filter {
+public class ActionRecordFilter implements Filter {
 
     private final ParamParser paramParser = ParamParser.getInstance();
 
