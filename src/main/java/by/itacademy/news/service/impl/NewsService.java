@@ -13,6 +13,7 @@ import by.itacademy.news.util.validation.news.impl.FullNewsValidatorChain;
 import by.itacademy.news.util.validation.news.impl.PartialNewsValidatorChain;
 import by.itacademy.news.util.validation.news.impl.fields.*;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -22,19 +23,17 @@ public class NewsService implements INewsService {
 
     private final INewsRepository newsRepository = RepositoryProvider.getInstance().getNewsRepository();
 
+
     public NewsService() {
     }
+
 
     @Override
     public List<News> getAllNews() throws NewsServiceException {
         try {
-            List<News> newsList = newsRepository.takeAllNewsFromData();
-
-            return newsList.stream()
-                    .filter(News::isActive)
+            return newsRepository.takeAllNewsFromData().stream()
                     .sorted(NewsCompareType.BY_DATE.getComparator())
                     .collect(Collectors.toList());
-
         } catch (NewsRepositoryException e) {
             throw new NewsServiceException(e);
         }
@@ -42,7 +41,7 @@ public class NewsService implements INewsService {
 
     @Override
     public List<News> getLatestNews() throws NewsServiceException {
-        List<News> allNews = getAllNews();
+        List<News> allNews = new ArrayList<>(getAllNews());
         if (!allNews.isEmpty()) {
             return allNews.subList(0, Math.min(5, allNews.size()));
         } else {
@@ -53,10 +52,10 @@ public class NewsService implements INewsService {
     @Override
     public List<News> getPageNews(int countOfNewsOnPage, int currentPage) throws NewsServiceException {
         try {
-            List<News> allNews = getAllNews();
+            List<News> allNews = new ArrayList<>(getAllNews());
             if (!allNews.isEmpty()) {
                 return allNews.subList((countOfNewsOnPage * currentPage - countOfNewsOnPage),
-                        Math.min((countOfNewsOnPage * currentPage - 1), allNews.size()));
+                        Math.min((countOfNewsOnPage * currentPage), allNews.size()));
             } else {
                 throw new NewsServiceException("no data");
             }

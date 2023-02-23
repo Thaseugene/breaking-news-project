@@ -32,7 +32,7 @@ public class NewsRepository implements INewsRepository {
     public NewsRepository() {
     }
 
-    private final static String GET_NEWS_FROM_DATA_QUERY = "SELECT * FROM news";
+    private final static String GET_NEWS_FROM_DATA_QUERY = "SELECT * FROM news where (`is_active` = 1)";
 
     @Override
     public List<News> takeAllNewsFromData() throws NewsRepositoryException {
@@ -79,6 +79,7 @@ public class NewsRepository implements INewsRepository {
     public void deleteNewsFromData(List<Integer> deleteNewsId) throws NewsRepositoryException {
         try (Connection connection = getConnection()) {
             connection.setAutoCommit(false);
+            connection.setTransactionIsolation(Connection.TRANSACTION_READ_COMMITTED);
             try (PreparedStatement statement = connection.prepareStatement(CHANGE_NEWS_STATUS_QUERY)) {
                 for (int id : deleteNewsId) {
                     statement.setInt(1, 0);

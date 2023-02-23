@@ -8,9 +8,12 @@ import java.util.Properties;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Executor;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class PoolConnection implements IConnectionBuilder {
     private static PoolConnection instance;
+    private static final Logger LOGGER = Logger.getLogger(PoolConnection.class.getName());
     private BlockingQueue<Connection> connectionQueue;
     private BlockingQueue<Connection> givenAwayConQueue;
 
@@ -23,7 +26,7 @@ public class PoolConnection implements IConnectionBuilder {
     private PoolConnection() {
     }
 
-    public static PoolConnection getInstance() {
+    public synchronized static PoolConnection getInstance() {
         if (instance == null) {
             instance = new PoolConnection();
         }
@@ -41,9 +44,10 @@ public class PoolConnection implements IConnectionBuilder {
             }
     }
 
-    public synchronized Connection takeConnection() throws SQLException {
+    public Connection takeConnection() throws SQLException {
         Connection connection;
         try {
+            logPoolStats();
             connection = connectionQueue.take();
             givenAwayConQueue.add(connection);
         } catch (InterruptedException e) {
@@ -60,8 +64,13 @@ public class PoolConnection implements IConnectionBuilder {
             closeConnectionsQueue(givenAwayConQueue);
             closeConnectionsQueue(connectionQueue);
         } catch (SQLException e) {
-            // logger.log(Level.ERROR, "Error closing the connection.", e);
+            LOGGER.log(Level.WARNING, "Error closing the connection.", e);
         }
+    }
+
+    public void logPoolStats() {
+        LOGGER.log(Level.INFO, "Active connections: {0}", connectionQueue.size());
+        LOGGER.log(Level.INFO, "Idle connections: {0}", givenAwayConQueue.size());
     }
 
     private void closeConnectionsQueue(BlockingQueue<Connection> queue)
@@ -95,16 +104,22 @@ public class PoolConnection implements IConnectionBuilder {
         @Override
         public void close() throws SQLException {
             if (connection.isClosed()) {
+                LOGGER.log(Level.INFO, "is closed");
                 throw new SQLException("Attempting to close closed connection.");
             }
             if (connection.isReadOnly()) {
+                LOGGER.log(Level.INFO, "is readOnly");
                 connection.setReadOnly(false);
             }
-            if (!givenAwayConQueue.remove(this)) {
+            if (givenAwayConQueue.remove(this)) {
+                LOGGER.log(Level.INFO, "Connection {0} is being removed", this);
+            } else {
                 throw new SQLException(
                         "Error deleting connection from the given away connections pool.");
             }
-            if (!connectionQueue.offer(this)) {
+            if (connectionQueue.offer(this)) {
+                LOGGER.log(Level.INFO, "Connection {0} is being offered to pool", this);
+            } else {
                 throw new SQLException(
                         "Error allocating connection in the pool.");
             }
