@@ -6,7 +6,7 @@ import java.util.Comparator;
 
 public enum NewsCompareType {
 
-    BY_DATE(Comparator.comparing(News::getNewsDate).reversed());
+    BY_DATE(Comparator.comparing(News::getPublicationDate).reversed());
 
     private final Comparator<News> comparator;
 

@@ -7,31 +7,43 @@ import java.util.Objects;
 public class News implements Serializable{
 
 	private static final long serialVersionUID = 1L;
-	private String id;
+	private int id;
     private String title;
     private String briefNews;
     private String content;
-    private Date newsDate;
-
+    private Date creationDate;
+    private Date publicationDate;
+    private int authorId;
+    private boolean isActive;
     private String imagePath;
 
 
-    public News(String id, String title, String briefNews, String content, String imagePath, Date newsDate) {
+    public News(int id, String title, String briefNews, String content, String imagePath, Date creationDate,Date publicationDate, boolean isActive, int authorId) {
         this.id = id;
         this.title = title;
         this.briefNews = briefNews;
         this.content = content;
         this.imagePath = imagePath;
-        this.newsDate = newsDate;
+        this.creationDate = creationDate;
+        this.publicationDate = publicationDate;
+        this.isActive = isActive;
+        this.authorId = authorId;
     }
 
+    public News(int id, String title, String briefNews, String content, Date publicationDate) {
+        this.id = id;
+        this.title = title;
+        this.briefNews = briefNews;
+        this.content = content;
+        this.publicationDate = publicationDate;
+    }
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -65,13 +77,13 @@ public class News implements Serializable{
     }
 
 
-    public Date getNewsDate() {
-        return newsDate;
+    public Date getCreationDate() {
+        return creationDate;
     }
 
 
-    public void setNewsDate(Date newsDate) {
-        this.newsDate = newsDate;
+    public void setCreationDate(Date creationDate) {
+        this.creationDate = creationDate;
     }
 
     public String getImagePath() {
@@ -82,16 +94,43 @@ public class News implements Serializable{
         this.imagePath = imagePath;
     }
 
+    public Date getPublicationDate() {
+        return publicationDate;
+    }
+
+    public void setPublicationDate(Date publicationDate) {
+        this.publicationDate = publicationDate;
+    }
+
+    public int getAuthorId() {
+        return authorId;
+    }
+
+    public void setAuthorId(int authorId) {
+        this.authorId = authorId;
+    }
+
+    public boolean isActive() {
+        return isActive;
+    }
+
+    public void setActive(boolean active) {
+        isActive = active;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         News news = (News) o;
-        return Objects.equals(id, news.id) && Objects.equals(title, news.title) && Objects.equals(briefNews, news.briefNews) && Objects.equals(content, news.content) && Objects.equals(newsDate, news.newsDate) && Objects.equals(imagePath, news.imagePath);
+        return authorId == news.authorId && isActive == news.isActive && Objects.equals(id, news.id) &&
+                Objects.equals(title, news.title) && Objects.equals(briefNews, news.briefNews) &&
+                Objects.equals(content, news.content) && Objects.equals(creationDate, news.creationDate) &&
+                Objects.equals(publicationDate, news.publicationDate) && Objects.equals(imagePath, news.imagePath);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, title, briefNews, content, newsDate, imagePath);
+        return Objects.hash(id, title, briefNews, content, creationDate, publicationDate, authorId, isActive, imagePath);
     }
 }

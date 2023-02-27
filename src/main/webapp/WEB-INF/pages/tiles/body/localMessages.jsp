@@ -51,4 +51,8 @@
 <fmt:message bundle="${loc}" key="label.en" var="english"/>
 <fmt:message bundle="${loc}" key="label.date" var="date"/>
 <fmt:message bundle="${loc}" key="label.time" var="time"/>
-
+<fmt:message bundle="${loc}" key="label.loginPattern" var="loginPattern"/>
+<fmt:message bundle="${loc}" key="label.passwordPattern" var="passwordPattern"/>
+<fmt:message bundle="${loc}" key="label.right" var="right"/>
+<fmt:message bundle="${loc}" key="label.wrong" var="wrong"/>
+<fmt:message bundle="${loc}" key="label.newsCount" var="newsCount"/>

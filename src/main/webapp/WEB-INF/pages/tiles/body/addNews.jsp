@@ -3,6 +3,7 @@
 <!DOCTYPE html>
 
 <html lang="${sessionScope.language}">
+
 <div class="container">
     <br><br>
     <div class="row">
@@ -20,28 +21,21 @@
                     <label for="textarea2">${brief}</label>
                 </div>
                 <div class="input-field col s6">
-                    <input type="text" class="datepicker" id="textarea3" name="date">
+                    <input type="text" class="datepicker validate" required id="textarea3" name="date">
                     <label for="textarea3">${date}</label>
                 </div>
                 <div class="input-field col s6">
-                    <input type="text" class="timepicker" id="textarea4" name="time">
-                    <label for="textarea4">${time}</label>
                 </div>
                 <div class="input-field col s12">
-                    <textarea id="textarea5" class="materialize-textarea validate" required name="content" rows="10"></textarea>
+                    <textarea id="textarea5" class="materialize-textarea" name="content"></textarea>
                     <label for="textarea5">${content}</label>
                 </div>
                 <br>
                 <div class="input-field col s12">
-                    <div class="file-field input-field">
-                        <div class="btn-small waves-effect grey lighten-1">
-                            <span>${addImage}</span>
-                            <input type="file" name="image" class="validate" required>
-                        </div>
-                        <div class="file-path-wrapper">
-                            <input class="file-path validate" type="text">
-                        </div>
-                    </div>
+                    <input type="text" name="image" id="imageUrl" class="validate" required>
+                    <label for="imageUrl">${addImage}</label>
+                    <br><br>
+                    <img id="preview" src="">
                 </div>
                 <c:if test="${not (param.error eq null)}">
                     <p class="h6 center-align" style="color:red;"><fmt:message bundle="${loc}"

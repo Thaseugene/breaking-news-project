@@ -19,6 +19,9 @@ public enum ParameterType {
     PRESENTATION ("presentation"),
     REGISTRATION ("registration"),
     AUTHENTICATION ("authentication"),
+    COUNT_OF_NEWS_ON_PAGE ("countOfNewsOnPage"),
+    CURRENT_PAGE ("currentPage"),
+    NUMBER_OF_PAGES ("numOfPages"),
     VIEW_NEWS ("viewNews"),
     EDIT_NEWS ("editNews"),
     ADD_NEWS ("addNews"),
@@ -34,7 +37,8 @@ public enum ParameterType {
     LANGUAGE ("language"),
     DATE ("date"),
     TIME ("time"),
-    GET_METHOD_TYPE ("GET");
+    GET_METHOD_TYPE ("GET"),
+    POST_METHOD_TYPE ("POST");
 
     private final String param;
 
