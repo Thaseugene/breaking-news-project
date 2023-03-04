@@ -13,7 +13,6 @@ import java.util.logging.Logger;
 
 public class UserRepository implements IUserRepository {
 
-
     private final PoolConnection poolConnection = PoolConnection.getInstance();
     private final String salt = BCrypt.gensalt();
     private static final Logger LOGGER = Logger.getLogger(UserRepository.class.getName());
@@ -22,12 +21,13 @@ public class UserRepository implements IUserRepository {
     public static final String COLUMN_LABEL_EMAIL = "email";
     public static final String COLUMN_LABEL_LOGIN = "login";
     public static final String COLUMN_LABEL_PASSWORD = "password";
-    public static final String COLUMN_LABEL_ROLE = "role_name";
+    public static final String COLUMN_LABEL_ROLE = "role";
     public static final String COLUMN_LABEL_REGISTER_DATE = "register_date";
     public static final String COLUMN_LABEL_IS_ACTIVE = "is_active";
     public static final String COLUMN_LABEL_ID = "id";
 
     public UserRepository() {
+
     }
 
     private static final String GET_USER_ID_QUERY = "SELECT id, password FROM users WHERE login = ?;";
@@ -40,9 +40,9 @@ public class UserRepository implements IUserRepository {
             try (ResultSet resultSet = statement.executeQuery()) {
                 int id = 0;
                 if (resultSet.next()) {
-                    String storedHash = resultSet.getString("password");
+                    String storedHash = resultSet.getString(COLUMN_LABEL_PASSWORD);
                     if (verifyPassword(password, storedHash)) {
-                        id = resultSet.getInt("id");
+                        id = resultSet.getInt(COLUMN_LABEL_ID);
                     }
                 }
                 return id;
@@ -70,7 +70,7 @@ public class UserRepository implements IUserRepository {
     }
 
     private static final String GET_USER_BY_ID_QUERY = "SELECT * FROM users JOIN user_details ON " +
-            "user_details.Users_id = users.id\n JOIN role ON  users.role_id = role.id\n WHERE users.id = ?;";
+            "user_details.Users_id = users.id\n WHERE users.id = ?;";
 
     @Override
     public User takeUserById(int id) throws UserRepositoryException {
@@ -85,7 +85,7 @@ public class UserRepository implements IUserRepository {
                     String email = resultSet.getString(COLUMN_LABEL_EMAIL);
                     String login = resultSet.getString(COLUMN_LABEL_LOGIN);
                     String password = resultSet.getString(COLUMN_LABEL_PASSWORD);
-                    String userRole = resultSet.getString(COLUMN_LABEL_ROLE).toUpperCase();
+                    String userRole = resultSet.getString(COLUMN_LABEL_ROLE);
                     Date registerDate = resultSet.getDate(COLUMN_LABEL_REGISTER_DATE);
                     int isActive = resultSet.getInt(COLUMN_LABEL_IS_ACTIVE);
                     user = new User(
@@ -100,7 +100,7 @@ public class UserRepository implements IUserRepository {
                             isActive != 0);
                 }
             }
-        } catch (SQLException | InterruptedException e) {
+        } catch (SQLException | InterruptedException | IllegalArgumentException e) {
             LOGGER.log(Level.INFO, "Problems with taking info from data or another exception occurred", e);
             throw new UserRepositoryException("Database getting info problems" ,e);
         }
@@ -108,13 +108,12 @@ public class UserRepository implements IUserRepository {
     }
 
     private static final String INSERT_USER_MAIN_DATA_QUERY = "INSERT INTO users " +
-            "(login, password, email, role_id, is_active)  VALUES (?, ?, ?, ?, ?);";
+            "(login, password, email, role, is_active)  VALUES (?, ?, ?, ?, ?);";
     private static final String INSERT_USER_DETAILS_QUERY = "INSERT INTO user_details " +
             "(users_id, name, surname, register_date)  VALUES (?, ?, ?, ?);";
 
     @Override
     public void addNewUser(User user) throws UserRepositoryException {
-        int roleId = takeUsersRole(user);
         try (Connection connection = getConnection()) {
             connection.setAutoCommit(false);
             try (PreparedStatement statementOne = connection.prepareStatement(INSERT_USER_MAIN_DATA_QUERY,
@@ -123,7 +122,7 @@ public class UserRepository implements IUserRepository {
                 statementOne.setString(1, user.getLogin());
                 statementOne.setString(2, BCrypt.hashpw(user.getPassword(), salt));
                 statementOne.setString(3, user.getEmail());
-                statementOne.setInt(4, roleId);
+                statementOne.setString(4, user.getRole().toString());
                 statementOne.setInt(5, user.isActive() ? 1 : 0);
                 statementOne.executeUpdate();
                 try (ResultSet generatedKeys = statementOne.getGeneratedKeys()) {
@@ -146,25 +145,6 @@ public class UserRepository implements IUserRepository {
             LOGGER.log(Level.INFO, "Problems with adding info to data or another exception occurred", e);
             throw new UserRepositoryException("Database adding info problems" ,e);
         }
-    }
-
-    public static final String GET_USER_ROLE_QUERY = "SELECT id FROM news_service_db.role where role_name = ?;";
-
-    private int takeUsersRole(User user) throws UserRepositoryException {
-        int roleId = 0;
-        try (Connection connection = getConnection();
-             PreparedStatement statement = connection.prepareStatement(GET_USER_ROLE_QUERY)) {
-            statement.setString(1, user.getRole().toString().toLowerCase());
-            try (ResultSet resultSet = statement.executeQuery()) {
-                if (resultSet.next()) {
-                    roleId = resultSet.getInt(COLUMN_LABEL_ID);
-                }
-            }
-        } catch (SQLException | InterruptedException e) {
-            LOGGER.log(Level.INFO, "Problems with taking info from data or another exception occurred", e);
-            throw new UserRepositoryException("Database getting info problems" ,e);
-        }
-        return roleId;
     }
 
     private boolean verifyPassword(String enteredPassword, String storedHash) {
